@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\BrandController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/item/{slug}', [ItemController::class, 'index']);
