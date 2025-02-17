@@ -32,8 +32,8 @@ defineProps(["title", "desc", "price", "image", "slug"]);
     gap: 10px;
 }
 .overview-icon {
+    color: var(--color-logo);
     font-size: 20px;
-    color: black;
 }
 .overview-add-item {
     display: flex;
@@ -44,23 +44,22 @@ defineProps(["title", "desc", "price", "image", "slug"]);
 .item {
     display: flex;
     flex-direction: column;
-    color: black;
-    max-width: 300px;
+    max-width: 275px;
 }
 .itemimg {
     object-fit: cover;
     border-radius: 10px;
-    width: 300px;
-    height: 266.56px;
+    width: 275px;
+    height: 275px;
 }
 .title {
-    color: black;
     font-weight: bold;
+    color: var(--color-text);
     font-size: larger;
     margin: 0;
 }
 .desc {
     margin: 0;
-    color: #333;
+    color: var(--color-text-2);
 }
 </style>

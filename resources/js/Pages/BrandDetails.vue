@@ -56,7 +56,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 <style scoped>
 .brand-container {
     margin: 50px;
-    color: black;
+    color: var(--color-text);
 }
 .brand-profile-container {
     display: flex;
@@ -82,10 +82,10 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     width: 200px;
 }
 .see-all-products {
-    background-color: rgb(208, 173, 240);
+    background-color: var(--color-logo);
     padding: 10px;
     margin: 0;
     border-radius: 10px;
-    color: white;
+    color: var(--color-background);
 }
 </style>

@@ -47,10 +47,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     </div>
                     <p v-if="item.brand" class="item-brand-name">
                         by
-                        <Link
-                            style="color: black"
-                            :href="`/brand/${item.brand.slug}`"
-                        >
+                        <Link :href="`/brand/${item.brand.slug}`">
                             {{ item.brand.name }}
                         </Link>
                     </p>
@@ -102,11 +99,11 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 }
 .item-middle-container {
     margin: 50px;
-    color: black;
+    color: var(--color-text);
 }
 .item-bottom-container {
     margin: 50px;
-    color: black;
+    color: var(--color-text);
 }
 .details-image {
     object-fit: cover;
@@ -120,7 +117,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: black;
+    color: var(--color-text);
     width: 100%;
 }
 .details-top-category-container {
@@ -151,38 +148,42 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     margin: 0;
 }
 .item-featured {
-    background-color: rgb(208, 173, 240);
+    background-color: var(--color-logo);
     padding: 10px;
     margin: 0;
     border-radius: 10px;
-    color: white;
+    color: var(--color-background);
 }
 .item-stock {
     margin: 0;
 }
 .item-price {
     font-size: 30px;
-    color: rgb(97, 97, 97);
+    color: var(--color-text-2);
     font-weight: bold;
     margin: 0;
 }
 .item-brand {
-    color: rgb(208, 173, 240);
+    color: var(--color-logo);
     margin: 0;
 }
 .item-brand-name {
     margin-top: 0;
 }
+.item-brand-name a {
+    color: var(--color-text);
+}
 .item-category {
     margin: 0;
-    color: rgb(208, 173, 240);
+    color: var(--color-logo);
 }
 .item-short-desc {
     font-size: 18px;
 }
 .add-to-cart {
     font-size: 15px;
-    background-color: rgb(208, 173, 240);
+    background-color: var(--color-logo);
+    color: var(--color-background);
     border-radius: 5px;
     padding: 10px;
     letter-spacing: 5px;

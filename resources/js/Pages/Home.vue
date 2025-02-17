@@ -49,10 +49,11 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     margin: 50px;
 }
 .title {
-    color: black;
+    color: var(--color-text);
 }
 .top-container {
     display: flex;
+    color: white;
     flex-direction: column;
     align-items: center;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
@@ -71,7 +72,6 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    margin: 50px;
 }
 .review-container {
     margin: 50px;

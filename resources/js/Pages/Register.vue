@@ -1,5 +1,6 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
+import Layout from "../Components/Layout.vue";
 
 const form = useForm({
     name: "",
@@ -25,81 +26,88 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="auth">
-        <div class="auth-container">
-            <h2>Daftarkan Akun</h2>
-            <form @submit.prevent="submit">
-                <div>
-                    <label for="name">Name</label>
-                    <input
-                        id="name"
-                        v-model="form.name"
-                        type="text"
-                        autocomplete="off"
-                        required
-                    />
-                    <span
-                        v-if="form.errors.name"
-                        style="color: red; text-align: center"
-                        >{{ form.errors.name }}</span
-                    >
-                </div>
-                <div>
-                    <label for="email">Email</label>
-                    <input
-                        id="email"
-                        v-model="form.email"
-                        type="email"
-                        autocomplete="off"
-                        required
-                    />
-                    <span
-                        v-if="form.errors.email"
-                        style="color: red; text-align: center"
-                        >{{ form.errors.email }}</span
-                    >
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input
-                        id="password"
-                        v-model="form.password"
-                        type="password"
-                        autocomplete="off"
-                        required
-                    />
-                    <span
-                        v-if="form.errors.password"
-                        style="color: red; text-align: center"
-                        >{{ form.errors.password }}</span
-                    >
-                </div>
-                <div>
-                    <label for="password_confirmation"
-                        >Konfirmasi Password</label
-                    >
-                    <input
-                        id="password_confirmation"
-                        v-model="form.password_confirmation"
-                        type="password"
-                        required
-                    />
-                    <span
-                        v-if="form.errors.password_confirmation"
-                        style="color: red; text-align: center"
-                        >{{ form.errors.password_confirmation }}</span
-                    >
-                </div>
-                <button type="submit">Daftar</button>
-            </form>
-            <Link href="/login">Sudah punya akun?</Link>
+    <Layout title="Register">
+        <div class="auth">
+            <div class="auth-container">
+                <h2>Daftarkan Akun</h2>
+                <form class="form-container" @submit.prevent="submit">
+                    <div>
+                        <label for="name">Name</label>
+                        <input
+                            id="name"
+                            v-model="form.name"
+                            type="text"
+                            autocomplete="off"
+                            autofocus
+                            required
+                        />
+                        <span
+                            v-if="form.errors.name"
+                            style="color: red; text-align: center"
+                            >{{ form.errors.name }}</span
+                        >
+                    </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input
+                            id="email"
+                            v-model="form.email"
+                            type="email"
+                            autocomplete="off"
+                            autofocus
+                            required
+                        />
+                        <span
+                            v-if="form.errors.email"
+                            style="color: red; text-align: center"
+                            >{{ form.errors.email }}</span
+                        >
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input
+                            id="password"
+                            v-model="form.password"
+                            type="password"
+                            autocomplete="off"
+                            autofocus
+                            required
+                        />
+                        <span
+                            v-if="form.errors.password"
+                            style="color: red; text-align: center"
+                            >{{ form.errors.password }}</span
+                        >
+                    </div>
+                    <div>
+                        <label for="password_confirmation"
+                            >Konfirmasi Password</label
+                        >
+                        <input
+                            id="password_confirmation"
+                            v-model="form.password_confirmation"
+                            type="password"
+                            required
+                            autocomplete="off"
+                            autofocus
+                        />
+                        <span
+                            v-if="form.errors.password_confirmation"
+                            style="color: red; text-align: center"
+                            >{{ form.errors.password_confirmation }}</span
+                        >
+                    </div>
+                    <button type="submit">Daftar</button>
+                </form>
+                <Link href="/login">Sudah punya akun?</Link>
+            </div>
         </div>
-    </div>
+    </Layout>
 </template>
 
 <style scoped>
 .auth {
-    color: white;
+    color: var(--color-text);
     height: 85vh;
     align-content: center;
 }
@@ -107,11 +115,17 @@ const submit = () => {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #111;
+    background-color: var(--color-background-mute);
 }
-
+.auth-container a {
+    color: var(--color-logo);
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
 h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -123,15 +137,21 @@ label {
 }
 
 input {
-    width: 95%;
+    width: 100%;
     padding: 8px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 1px solid var(--color-text);
     border-radius: 4px;
 }
 
 button {
-    width: 100%;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border-radius: 4px;
+    border: 1px solid var(--color-text);
+    padding: 10px;
 }
 
 span {

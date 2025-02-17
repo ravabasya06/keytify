@@ -41,31 +41,10 @@ const { user } = usePage().props;
     display: flex;
     justify-content: space-between;
     position: sticky;
-    background-color: white;
+    background-color: var(--color-background-mute);
     padding: 10px;
     z-index: 1;
 }
-.categories {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.categories-list {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    border: solid 1px rgb(32, 32, 32);
-    border-radius: 10px;
-    margin: 15px;
-}
-.categories-title {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    background-color: rgb(32, 32, 32);
-    font-weight: bold;
-    text-align: center;
-}
-
 .menu-icon {
     font-size: 24px;
     cursor: pointer;
@@ -76,7 +55,7 @@ const { user } = usePage().props;
     margin: 0;
     padding: 5px;
     border-radius: 10%;
-    color: rgb(208, 173, 240);
+    color: var(--color-logo);
 }
 
 .right-group {
@@ -96,61 +75,9 @@ const { user } = usePage().props;
 }
 
 .user-icon {
-    color: black;
+    color: var(--color-text);
     font-size: 24px;
     cursor: pointer;
     border-radius: 20%;
-}
-.plus-button {
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    border-radius: 20%;
-}
-.sidebar {
-    height: 100%;
-    position: fixed;
-    width: 0;
-    top: 0;
-    left: 0;
-    background-color: #000000;
-    z-index: 10;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    color: white;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    text-align: center;
-}
-
-.sidebar ul li a {
-    padding: 15px;
-    color: white;
-    text-decoration: none;
-    display: block;
-    transition: 0.3s;
-}
-
-.last-list a {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.sidebar ul li a:hover {
-    background-color: #460606;
-}
-
-.closebtn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    text-align: left;
 }
 </style>

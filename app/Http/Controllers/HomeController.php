@@ -10,7 +10,7 @@ use App\Models\Review;
 class HomeController extends Controller
 {
     public function index(){
-        $featured_items = Item::where('featured', 1)->orderBy('created_at')->select(['name', 'slug', 'price', 'short_desc', 'image_url'])->get();
+        $featured_items = Item::where('featured', 1)->orderBy('created_at')->inRandomOrder()->limit(4)->select(['name', 'slug', 'price', 'short_desc', 'image_url'])->get();
         $reviews = Review::orderBy('created_at')->get();
         return Inertia::render('Home', [
             'featured_items' => $featured_items,

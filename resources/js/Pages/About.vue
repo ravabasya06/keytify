@@ -46,13 +46,14 @@ import Layout from "../Components/Layout.vue";
 <style scoped>
 .about-container {
     margin: 30px;
-    color: black;
+    color: var(--color-text);
 }
 .about-container p {
     font-size: 20px;
 }
 .about-top-container {
     font-size: xx-large;
+    color: white;
     padding: 100px;
     display: flex;
     flex-direction: column;
@@ -62,6 +63,7 @@ import Layout from "../Components/Layout.vue";
 }
 .about-mid-container {
     font-size: xx-large;
+    color: white;
     padding: 100px;
     display: flex;
     flex-direction: column;
@@ -71,6 +73,7 @@ import Layout from "../Components/Layout.vue";
 }
 .about-bot-container {
     font-size: xx-large;
+    color: white;
     padding: 100px;
     display: flex;
     flex-direction: column;

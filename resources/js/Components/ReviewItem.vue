@@ -41,7 +41,7 @@ defineProps(["name", "desc", "star", "image"]);
 .review-item {
     display: flex;
     flex-direction: column;
-    background-color: #eeeeee;
+    background-color: var(--color-background-mute);
     padding: 20px;
     border-radius: 10px;
 }
@@ -55,12 +55,6 @@ defineProps(["name", "desc", "star", "image"]);
 .review-stars {
     display: flex;
     align-items: center;
-}
-.review-name {
-    color: black;
-}
-.review-desc {
-    color: black;
 }
 .star {
     font-size: 30px;

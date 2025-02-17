@@ -29,9 +29,12 @@ const search = () => {
 const sortedItems = computed(() => {
     return [...props.items].sort((a, b) => {
         if (selectedSort.value === "default") {
-            return props.items;
+            return 0;
         } else if (selectedSort.value === "latest") {
-            return new Date(b.created_at) - new Date(a.created_at);
+            return (
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            );
         } else if (selectedSort.value === "price_low") {
             return a.price - b.price;
         } else if (selectedSort.value === "price_high") {
@@ -132,12 +135,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 .right-container {
     display: flex;
     flex-direction: column;
-    color: black;
+    color: var(--color-text);
     width: 100%;
     gap: 35px;
 }
 .category-container {
-    color: black;
+    color: var(--color-text);
 }
 .category-container p {
     margin: 0;
@@ -145,7 +148,11 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 .category-items-container {
     display: flex;
     flex-direction: column;
+    color: var(--color-logo);
     margin: 15px;
+}
+.category-items-container p {
+    color: var(--color-logo);
 }
 .search-container {
     display: flex;
@@ -167,27 +174,27 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 .item-container {
     display: grid;
     grid-template-columns: auto auto auto;
-    justify-content: space-between;
+    gap: 30px;
 }
 .select-input {
     font-size: 15px;
     padding: 10px;
     border-radius: 5px;
-    border: solid 1px black;
-    background-color: white;
-    color: black;
+    border: solid 1px var(--color-text);
+    background-color: var(--color-background-mute);
+    color: var(--color-text);
 }
 .search-input {
     font-size: 15px;
     padding: 10px;
     border-radius: 5px;
-    border: solid 1px black;
-    background-color: white;
-    color: black;
+    border: solid 1px var(--color-text);
+    background-color: var(--color-background-mute);
+    color: var(--color-text);
 }
 .search-button {
-    background-color: rgb(208, 173, 240);
-    border: solid 1px rgb(208, 173, 240);
+    background-color: var(--color-logo);
+    border: solid 1px var(--color-logo);
     border-radius: 5px;
     width: 40px;
     height: 40px;

@@ -1,9 +1,8 @@
 <template>
-    <hr />
     <div>
         <div class="footer-container">
             <div>
-                <Link href="">
+                <Link href="/">
                     <h1 class="footer-title">KEYTIFY</h1>
                 </Link>
                 <p class="footer-desc">Solution to all keyboard enthusiasts.</p>
@@ -32,26 +31,25 @@
     margin: 20px;
 }
 .footer-socials a {
-    color: black;
+    color: var(--color-text);
 }
 .footer-container {
     display: flex;
+    background-color: var(--color-background-mute);
     flex-direction: column;
     gap: 50px;
 }
 .footer-title {
-    color: rgb(208, 173, 240);
     text-align: center;
     margin: 0;
+    color: var(--color-logo);
 }
 .footer-desc {
-    color: black;
     margin: 0;
     text-align: center;
 }
 .copyright {
     margin: 0;
     text-align: center;
-    color: black;
 }
 </style>

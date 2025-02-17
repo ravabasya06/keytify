@@ -11,7 +11,7 @@
     z-index: 4;
     width: max-content;
     border-radius: 10px;
-    color: black;
-    background-color: white;
+    color: var(--color-text);
+    background-color: var(--color-background);
 }
 </style>
