@@ -1,20 +1,29 @@
 <script setup>
-defineProps(["title", "desc", "price", "image", "slug"]);
+defineProps(["title", "item"]);
+
+const noImage =
+    "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+
+const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 <template>
     <div class="item">
-        <Link :href="`/item/${slug}`">
-            <img class="itemimg" :src="image" alt="Item" />
+        <Link :href="`/item/${item.slug}`">
+            <img
+                class="itemimg"
+                :src="item.image_url ? item.image_url : noImage"
+                alt="Item"
+            />
         </Link>
         <div class="overview-desc">
             <div>
-                <Link :href="`/item/${slug}`">
-                    <p class="title">{{ title }}</p>
+                <Link :href="`/item/${item.slug}`">
+                    <p class="title">{{ item.name }}</p>
                 </Link>
-                <p class="desc">{{ desc }}</p>
+                <p class="desc">{{ item.short_desc }}</p>
             </div>
             <div class="overview-add-item">
-                <p class="price">{{ price }}</p>
+                <p class="price">{{ `Rp${formatPrice(item.price)}` }}</p>
                 <Link href="">
                     <font-awesome-icon
                         class="overview-icon"
@@ -51,6 +60,12 @@ defineProps(["title", "desc", "price", "image", "slug"]);
     border-radius: 10px;
     width: 275px;
     height: 275px;
+    transition: transform 0.2s;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.itemimg:hover {
+    transform: scale(1.05);
 }
 .title {
     font-weight: bold;

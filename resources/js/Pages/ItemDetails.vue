@@ -78,14 +78,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
             <hr />
             <h1>Related Items</h1>
             <div class="related-items-container">
-                <ItemOverview
-                    v-for="item in related_items"
-                    :title="item.name"
-                    :desc="item.short_desc"
-                    :price="`Rp${formatPrice(item.price)}`"
-                    :image="item.image_url"
-                    :slug="item.slug"
-                />
+                <ItemOverview v-for="item in related_items" :item="item" />
             </div>
         </div>
     </Layout>

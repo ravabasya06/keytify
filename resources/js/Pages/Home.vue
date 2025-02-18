@@ -1,11 +1,10 @@
 <script setup>
 import Layout from "../Components/Layout.vue";
+import Nav from "../Components/Nav.vue";
 import ItemOverview from "../Components/ItemOverview.vue";
 import ReviewItem from "../Components/ReviewItem.vue";
 
 defineProps(["user", "reviews", "featured_items"]);
-
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
 <template>
@@ -19,14 +18,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
         <div class="itemcontainer">
             <h1 class="title">Our Best Products</h1>
             <div class="item-itemcontainer">
-                <ItemOverview
-                    v-for="item in featured_items"
-                    :title="item.name"
-                    :desc="item.short_desc"
-                    :price="`Rp${formatPrice(item.price)}`"
-                    :image="item.image_url"
-                    :slug="item.slug"
-                />
+                <ItemOverview v-for="item in featured_items" :item="item" />
             </div>
         </div>
         <div class="review-container">
@@ -58,7 +50,6 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     align-items: center;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
         url("../../../assets/keyboards/purplebomb.jpeg");
-    width: 100%;
 }
 .home-title {
     font-size: 100px;

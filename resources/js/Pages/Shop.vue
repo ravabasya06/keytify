@@ -112,14 +112,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                 </div>
                 <div class="item-container">
                     <p v-if="Object.keys(items).length == 0">No match found</p>
-                    <ItemOverview
-                        v-for="item in sortedItems"
-                        :title="item.name"
-                        :desc="item.short_desc"
-                        :price="`Rp${formatPrice(item.price)}`"
-                        :image="item.image_url"
-                        :slug="item.slug"
-                    />
+                    <ItemOverview v-for="item in sortedItems" :item="item" />
                 </div>
             </div>
         </div>

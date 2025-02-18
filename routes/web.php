@@ -9,6 +9,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductListController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/item/{slug}', [ItemController::class, 'index']);
@@ -16,6 +18,11 @@ Route::get('/shop', [ShopController::class, 'index'])->name('search');
 Route::get('/shop/{slug}', [ShopController::class, 'filter'])->name('filter');
 Route::get('/brand/{slug}', [BrandController::class, 'index']);
 Route::inertia('/about', 'About')->name('about');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/product-list', [ProductListController::class, 'index']);
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');

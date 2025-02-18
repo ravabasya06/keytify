@@ -9,7 +9,10 @@ const { user } = usePage().props;
     <nav class="navbar">
         <div class="left-group">
             <Link href="/">
-                <h1 class="logo">KEYTIFY</h1>
+                <div class="logo-container">
+                    <img class="logo-img" src="/public/logo.png" alt="Logo" />
+                    <h1 class="logo-text">KEYTIFY</h1>
+                </div>
             </Link>
         </div>
         <div class="right-group">
@@ -21,6 +24,9 @@ const { user } = usePage().props;
             </Link>
             <Link href="/shop">
                 <div class="user-icon">Shop</div>
+            </Link>
+            <Link v-if="user && user.isAdmin" href="/dashboard">
+                <div class="user-icon">Dashboard</div>
             </Link>
             <Link href="/cart">
                 <div class="user-icon">
@@ -38,24 +44,35 @@ const { user } = usePage().props;
 
 <style scoped>
 .navbar {
-    display: flex;
-    justify-content: space-between;
     position: sticky;
+    top: 0;
+    display: flex;
+    z-index: 2;
+    justify-content: space-between;
     background-color: var(--color-background-mute);
     padding: 10px;
-    z-index: 1;
 }
 .menu-icon {
     font-size: 24px;
     cursor: pointer;
 }
-
-.logo {
+.logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.logo-text {
     font-size: 30px;
     margin: 0;
     padding: 5px;
     border-radius: 10%;
     color: var(--color-logo);
+}
+
+.logo-img {
+    height: 40px;
+    width: 40px;
+    filter: var(--color-logo-img);
 }
 
 .right-group {
@@ -79,5 +96,8 @@ const { user } = usePage().props;
     font-size: 24px;
     cursor: pointer;
     border-radius: 20%;
+}
+.user-icon:hover {
+    color: var(--color-text-2);
 }
 </style>

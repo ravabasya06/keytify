@@ -17,23 +17,13 @@ watch(
 
 <template>
     <main>
-        <header v-if="title !== 'Login'">
-            <Nav />
-        </header>
+        <Nav />
         <Notification />
         <article>
             <slot />
         </article>
-        <footer>
-            <FooterTemplate />
-        </footer>
+        <FooterTemplate />
     </main>
 </template>
 
-<style scoped>
-article {
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh);
-}
-</style>
+<style scoped></style>

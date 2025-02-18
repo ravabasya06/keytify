@@ -9,7 +9,7 @@
     --vt-c-black-mute: #282828;
 
     --vt-c-indigo: #2c3e50;
-    --vt-c-light-purple: rgb(208, 173, 240);
+    --vt-c-light-purple: #d0adf0;
     --vt-c-dark-purple: #551a8b;
 
     --vt-c-divider-light-1: black;
@@ -18,7 +18,7 @@
     --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
 
     --vt-c-text-light-1: var(--vt-c-black);
-    --vt-c-text-light-2: #333;
+    --vt-c-text-light-2: #777;
     --vt-c-text-dark-1: var(--vt-c-white);
     --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 }
@@ -34,6 +34,8 @@
 
     --color-heading: var(--vt-c-text-light-1);
     --color-logo: var(--vt-c-dark-purple);
+    --color-logo-img: invert(18%) sepia(36%) saturate(3961%) hue-rotate(256deg)
+        brightness(90%) contrast(110%);
     --color-text: var(--vt-c-text-light-1);
     --color-text-opposite: var(--vt-c-text-dark-1);
     --color-text-2: var(--vt-c-text-light-2);
@@ -52,6 +54,8 @@
 
         --color-heading: var(--vt-c-text-dark-1);
         --color-logo: var(--vt-c-light-purple);
+        --color-logo-img: invert(79%) sepia(35%) saturate(866%)
+            hue-rotate(202deg) brightness(92%) contrast(104%);
         --color-text: var(--vt-c-text-dark-1);
         --color-text-opposite: var(--vt-c-text-light-1);
         --color-text-2: var(--vt-c-text-dark-2);

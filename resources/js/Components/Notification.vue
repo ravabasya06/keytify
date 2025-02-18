@@ -12,6 +12,6 @@
     width: max-content;
     border-radius: 10px;
     color: var(--color-text);
-    background-color: var(--color-background);
+    background-color: var(--color-background-mute);
 }
 </style>

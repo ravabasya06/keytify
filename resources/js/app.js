@@ -18,6 +18,10 @@ import {
     faUser,
     faStar as faStarSolid,
     faMagnifyingGlass,
+    faBars,
+    faKeyboard,
+    faList,
+    faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -30,6 +34,10 @@ library.add(
     faStarSolid,
     faStarRegular,
     faMagnifyingGlass,
+    faBars,
+    faKeyboard,
+    faList,
+    faUserGroup,
 );
 
 createInertiaApp({

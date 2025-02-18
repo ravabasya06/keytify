@@ -26,11 +26,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                 <div class="items-container">
                     <ItemOverview
                         v-for="item in recommended_items"
-                        :title="item.name"
-                        :desc="item.short_desc"
-                        :price="`Rp${formatPrice(item.price)}`"
-                        :image="item.image_url"
-                        :slug="item.slug"
+                        :item="item"
                     />
                 </div>
                 <div class="brand-name-container">
@@ -40,14 +36,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     </Link>
                 </div>
                 <div class="items-container">
-                    <ItemOverview
-                        v-for="item in items"
-                        :title="item.name"
-                        :desc="item.short_desc"
-                        :price="`Rp${formatPrice(item.price)}`"
-                        :image="item.image_url"
-                        :slug="item.slug"
-                    />
+                    <ItemOverview v-for="item in items" :item="item" />
                 </div>
             </div>
         </div>
