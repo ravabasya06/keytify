@@ -55,10 +55,12 @@ class ShopController extends Controller
             ->select('name', 'slug', 'price', 'short_desc', 'image_url');
         }
         else if($slug == "price-ascending"){
+            $category_title = "Price Ascending";
             $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')
             ->orderBy('price');
         }
         else if($slug == "price-descending"){
+            $category_title = "Price Descending";
             $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')
             ->orderByDesc('price');
         }
@@ -84,7 +86,7 @@ class ShopController extends Controller
             'items' => $items,
             'total' => $total,
             'categories' => $categories,
-            'category_title' => $title['name'] ?? "Featured"
+            'category_title' => $title['name'] ?? $category_title ?? "Featured"
         ]);
     }
 }
