@@ -6,6 +6,7 @@ import ItemOverview from "../Components/ItemOverview.vue";
 
 const props = defineProps([
     "items",
+    "total",
     "current_query",
     "categories",
     "category_title",
@@ -27,7 +28,7 @@ const search = () => {
 };
 
 const sortedItems = computed(() => {
-    return [...props.items].sort((a, b) => {
+    return [...props.items.data].sort((a, b) => {
         if (selectedSort.value === "default") {
             return 0;
         } else if (selectedSort.value === "latest") {
@@ -42,8 +43,6 @@ const sortedItems = computed(() => {
         }
     });
 });
-
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 <template>
     <Layout title="Shop">
@@ -70,6 +69,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                         <Link href="/shop/featured">
                             <p>Recommended Items</p>
                         </Link>
+                        <Link href="/shop/price-ascending">
+                            <p>Price: Low to High</p>
+                        </Link>
+                        <Link href="/shop/price-descending">
+                            <p>Price: High to Low</p>
+                        </Link>
                         <Link
                             v-for="category in categories"
                             :href="`/shop/${category.slug}`"
@@ -91,7 +96,8 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     </h1>
                     <div class="sort-container">
                         <p>
-                            Showing all {{ Object.keys(items).length }} results
+                            Showing all
+                            {{ total }} results
                         </p>
                         <select
                             v-model="selectedSort"
@@ -111,8 +117,24 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     </div>
                 </div>
                 <div class="item-container">
-                    <p v-if="Object.keys(items).length == 0">No match found</p>
+                    <p v-if="total == 0">No match found</p>
                     <ItemOverview v-for="item in sortedItems" :item="item" />
+                </div>
+                <div class="pagination">
+                    <div class="pagination-button">
+                        <Link
+                            v-if="props.items.links"
+                            v-for="link in props.items.links"
+                            :href="link.url ? link.url : ''"
+                            class="page-btn"
+                        >
+                            <span v-html="link.label"></span>
+                        </Link>
+                    </div>
+                    <span class="page-info"
+                        >Page {{ props.items.current_page }} of
+                        {{ props.items.last_page }}</span
+                    >
                 </div>
             </div>
         </div>
@@ -146,6 +168,9 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 }
 .category-items-container p {
     color: var(--color-logo);
+}
+.category-items-container p:hover {
+    color: var(--color-text);
 }
 .search-container {
     display: flex;
@@ -186,6 +211,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     color: var(--color-text);
 }
 .search-button {
+    color: var(--color-background);
     background-color: var(--color-logo);
     border: solid 1px var(--color-logo);
     border-radius: 5px;
@@ -195,5 +221,30 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 .shop-title {
     margin: 0;
     font-size: 50px;
+}
+.pagination {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.pagination-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.page-btn {
+    padding: 8px 12px;
+    background-color: var(--color-logo);
+    color: var(--color-background);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.page-info {
+    font-size: 16px;
 }
 </style>

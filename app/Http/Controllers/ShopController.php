@@ -21,21 +21,23 @@ class ShopController extends Controller
         if($query){
             $all_items = Item::join('categories', 'items.category_id', '=', 'categories.category_id')->leftJoin('brands', 'items.brand_id', '=', 'brands.brand_id');
             
-            $items = $all_items->where('items.name', 'LIKE', "%{$query}%")
+            $results = $all_items->where('items.name', 'LIKE', "%{$query}%")
             ->orWhere('items.type', 'LIKE', "%{$query}%")
             ->orWhere('items.short_desc', 'LIKE', "%{$query}%")
             ->orWhere('items.desc', 'LIKE', "%{$query}%")
             ->orWhere('brands.name', 'LIKE', "%{$query}%")
             ->orWhere('categories.name', 'LIKE', "%{$query}%")
-            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url')
-            ->get();
+            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url');
         }
         else {
-            $items = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')->get();
+            $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url');
         }
-
+        
+        $items = $results->paginate(12)->withQueryString()->onEachSide(1);
+        $total = $items->total();
         return Inertia::render('Shop', [
             'items' => $items,
+            'total' => $total,
             'current_query' => $query,
             'categories' => $categories,
             'category_title' => "Shop"
@@ -49,9 +51,16 @@ class ShopController extends Controller
         ->get();
 
         if($slug == "featured"){
-            $items = Item::where('featured', true)
-            ->select('name', 'slug', 'price', 'short_desc', 'image_url')
-            ->get();
+            $results = Item::where('featured', true)
+            ->select('name', 'slug', 'price', 'short_desc', 'image_url');
+        }
+        else if($slug == "price-ascending"){
+            $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')
+            ->orderBy('price');
+        }
+        else if($slug == "price-descending"){
+            $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')
+            ->orderByDesc('price');
         }
         else {
             $title = Category::where('slug', $slug)
@@ -62,17 +71,18 @@ class ShopController extends Controller
             )
             ->first();
 
-            $items = Item::join('categories', 'items.category_id', '=', 'categories.category_id')
+            $results = Item::join('categories', 'items.category_id', '=', 'categories.category_id')
             ->leftJoin('brands', 'items.brand_id', '=', 'brands.brand_id')
             ->where('brands.slug', $slug)
             ->orWhere('categories.slug', $slug)
-            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url')
-            ->get();
-
+            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url');
         }
 
+        $items = $results->paginate(12)->withQueryString()->onEachSide(1);
+        $total = $items->total();
         return Inertia::render('Shop', [
             'items' => $items,
+            'total' => $total,
             'categories' => $categories,
             'category_title' => $title['name'] ?? "Featured"
         ]);

@@ -1,10 +1,16 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 import { useForm, router } from "@inertiajs/vue3";
 import AdminLayout from "../Components/AdminLayout.vue";
-defineProps(["items", "categories"]);
+const props = defineProps(["items", "categories", "slug"]);
 
 const query = ref("");
+const category = ref("");
+const sortColumn = ref(""); // Column being sorted
+const sortOrder = ref("asc"); // Sorting order (asc/desc)
+
+category.value = props.slug ?? "";
+
 const search = () => {
     const form = useForm({
         search_query: query.value,
@@ -17,14 +23,54 @@ const search = () => {
     }
 };
 
+watch(category, (newCategory) => {
+    if (newCategory) {
+        router.visit(`/product-list/${newCategory}`);
+    } else {
+        router.visit("/product-list");
+    }
+});
+
+const sortBy = (column) => {
+    if (sortColumn.value === column) {
+        sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+    } else {
+        sortColumn.value = column;
+        sortOrder.value = "asc";
+    }
+};
+
+const sortedItems = computed(() => {
+    if (!sortColumn.value) {
+        return props.items.data; // Return original if no sorting is selected
+    }
+
+    return [...props.items.data].sort((a, b) => {
+        let valueA = a[sortColumn.value];
+        let valueB = b[sortColumn.value];
+
+        // Handle null values
+        if (valueA == null) valueA = "";
+        if (valueB == null) valueB = "";
+
+        // Convert to lowercase for case-insensitive sorting
+        if (typeof valueA === "string") valueA = valueA.toLowerCase();
+        if (typeof valueB === "string") valueB = valueB.toLowerCase();
+
+        if (valueA < valueB) return sortOrder.value === "asc" ? -1 : 1;
+        if (valueA > valueB) return sortOrder.value === "asc" ? 1 : -1;
+        return 0;
+    });
+});
+
 const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
 <template>
     <AdminLayout title="Products">
-        <div>
-            <button><p>All</p></button>
-            <button><p>Featured</p></button>
+        <div class="feature-buttons-container">
+            <button class="feature-buttons-left"><p>All</p></button>
+            <button class="feature-buttons-right"><p>Featured</p></button>
         </div>
         <div class="table-container">
             <div class="table-controls">
@@ -48,10 +94,16 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     </button>
                 </form>
                 <div class="filter-add-container">
-                    <select class="filter-select">
+                    <select v-model="category" class="filter-select">
                         <option value="">All Categories</option>
+                        <option value="price-ascending">
+                            Price: Low to High
+                        </option>
+                        <option value="price-descending">
+                            Price: High to Low
+                        </option>
                         <option
-                            v-for="category in categories"
+                            v-for="category in props.categories"
                             :value="category.slug"
                         >
                             {{ category.name }}
@@ -67,24 +119,62 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Slug</th>
-                            <th>Category</th>
-                            <th>Brand</th>
-                            <th>Type</th>
-                            <th>Stock</th>
-                            <th>Price</th>
-                            <th>Short Desc</th>
-                            <th>Desc</th>
-                            <th>Image URL</th>
-                            <th>Active</th>
+                        <tr class="table-head-container">
+                            <th @click="sortBy('item_id')">
+                                ID <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('name')">
+                                Name
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('slug')">
+                                Slug
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('category.name')">
+                                Category
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('brand.name')">
+                                Brand
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('type')">
+                                Type
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('stock')">
+                                Stock
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('price')">
+                                Price
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('short_desc')">
+                                Short Desc
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('desc')">
+                                Desc
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('image_url')">
+                                Image URL
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
+                            <th @click="sortBy('status')">
+                                Active
+                                <font-awesome-icon icon="fa-solid fa-sort" />
+                            </th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in items.data">
+                        <tr
+                            class="table-body-container"
+                            v-for="item in sortedItems"
+                        >
                             <td>{{ item.item_id }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.slug }}</td>
@@ -97,7 +187,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                                 {{ item.short_desc }}
                             </td>
                             <td class="ellipsis">
-                                {{ item.desc ? item.desc : "No" }}
+                                {{ item.desc }}
                             </td>
                             <td class="ellipsis">{{ item.image_url }}</td>
                             <td>{{ item.status ? "Yes" : "No" }}</td>
@@ -113,16 +203,17 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
         <div class="pagination">
             <div class="pagination-button">
                 <Link
-                    v-if="items.links"
-                    v-for="link in items.links"
-                    :href="link.url"
+                    v-if="props.items.links"
+                    v-for="link in props.items.links"
+                    :href="link.url ? link.url : ''"
                     class="page-btn"
                 >
                     <span v-html="link.label"></span>
                 </Link>
             </div>
             <span class="page-info"
-                >Page {{ items.current_page }} of {{ items.last_page }}</span
+                >Page {{ props.items.current_page }} of
+                {{ props.items.last_page }}</span
             >
         </div>
     </AdminLayout>
@@ -132,7 +223,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 /* Container */
 .table-container {
     width: auto;
-    padding: 20px;
+    margin: 20px;
     overflow-x: auto; /* Enables horizontal scrolling */
 }
 
@@ -142,6 +233,28 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+}
+.feature-buttons-container {
+    margin-left: 20px;
+}
+.feature-buttons-left,
+.feature-buttons-right {
+    padding: 12px 20px;
+    font-size: 15px;
+    background-color: var(--color-logo);
+    color: var(--color-background);
+    border: none;
+    cursor: pointer;
+}
+.feature-buttons-left:hover,
+.feature-buttons-right:hover {
+    background-color: var(--color-logo);
+}
+.feature-buttons-left {
+    border-bottom-left-radius: 5px;
+}
+.feature-buttons-right {
+    border-bottom-right-radius: 5px;
 }
 
 .search-input,
@@ -164,7 +277,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     align-items: center;
     gap: 5px;
 }
-
+.table-head-container th:hover {
+    background-color: var(--color-background-soft);
+}
+.table-body-container td:hover {
+    background-color: var(--color-background-mute);
+}
 /* Make table fully stretch to the container */
 .table-wrapper {
     width: 70vw;

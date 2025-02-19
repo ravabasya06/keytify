@@ -45,33 +45,22 @@ class ProductListController extends Controller
         ->groupBy('categories.category_id', 'categories.name', 'categories.slug')
         ->get();
 
-        if($slug == "featured"){
-            $items = Item::where('featured', true)
-            ->select('name', 'slug', 'price', 'short_desc', 'image_url')
-            ->get();
-        }
-        else {
-            $title = Category::where('slug', $slug)
-            ->select('name')
-            ->union(
-                Brand::where('slug', $slug)
-                    ->select('name')
-            )
-            ->first();
+        $query = Item::with(['category:category_id,name', 'brand:brand_id,name'])
+            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'short_desc', 'desc', 'image_url', 'status']);
 
-            $items = Item::join('categories', 'items.category_id', '=', 'categories.category_id')
-            ->leftJoin('brands', 'items.brand_id', '=', 'brands.brand_id')
-            ->where('brands.slug', $slug)
-            ->orWhere('categories.slug', $slug)
-            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url')
-            ->get();
-
+        if ($slug === 'price-ascending') {
+            $query->orderBy('price');
+        } elseif ($slug === 'price-descending') {
+            $query->orderByDesc('price');
+        } elseif ($slug) {
+            $query->whereRelation('category', 'slug', $slug);
         }
 
-        return Inertia::render('Shop', [
+        $items = $query->paginate(10)->withQueryString()->onEachSide(1);
+        return Inertia::render('ProductList', [
             'items' => $items,
             'categories' => $categories,
-            'category_title' => $title['name'] ?? "Featured"
+            'slug' => $slug
         ]);
     }
 

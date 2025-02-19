@@ -27,6 +27,10 @@
             <font-awesome-icon icon="fa-solid fa-keyboard" />
             <p>Products</p>
         </Link>
+        <Link class="nav-list" href="/brand-list">
+            <font-awesome-icon icon="fa-solid fa-tag" />
+            <p>Brands</p>
+        </Link>
         <Link class="nav-list" href="/category-list">
             <font-awesome-icon icon="fa-solid fa-list" />
             <p>Categories</p>

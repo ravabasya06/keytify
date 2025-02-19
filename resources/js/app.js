@@ -23,6 +23,8 @@ import {
     faList,
     faUserGroup,
     faPlus,
+    faSort,
+    faTag,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -40,6 +42,8 @@ library.add(
     faList,
     faUserGroup,
     faPlus,
+    faSort,
+    faTag,
 );
 
 createInertiaApp({

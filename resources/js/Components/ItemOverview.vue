@@ -54,6 +54,13 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     display: flex;
     flex-direction: column;
     max-width: 275px;
+    border-radius: 5px;
+}
+.item:hover {
+    color: var(--color-logo);
+}
+.item:hover {
+    color: var(--color-logo);
 }
 .itemimg {
     object-fit: cover;
