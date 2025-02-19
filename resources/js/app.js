@@ -22,6 +22,7 @@ import {
     faKeyboard,
     faList,
     faUserGroup,
+    faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -38,6 +39,7 @@ library.add(
     faKeyboard,
     faList,
     faUserGroup,
+    faPlus,
 );
 
 createInertiaApp({

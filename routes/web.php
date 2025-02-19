@@ -21,7 +21,7 @@ Route::inertia('/about', 'About')->name('about');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/product-list', [ProductListController::class, 'index']);
+    Route::get('/product-list', [ProductListController::class, 'index'])->name('search.product');
 });
 
 Route::middleware(['auth'])->group(function () {
