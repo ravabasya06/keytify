@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\OrderItem;
 
 class Item extends Model
 {
@@ -32,5 +35,10 @@ class Item extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id', 'brand_id');
+    }
+
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class, 'item_id', 'item_id');
     }
 }

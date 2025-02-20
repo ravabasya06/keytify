@@ -78,7 +78,7 @@ const formatPrice = (price) =>
                                     type="number"
                                     name="quantity"
                                     id="quantity"
-                                    style="margin-left: 25px; margin-right: 0px"
+                                    style="text-align: center"
                                     class="quantity"
                                     min="1"
                                     max="999"
@@ -121,6 +121,12 @@ const formatPrice = (price) =>
     </Layout>
 </template>
 <style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 table {
     width: max-content; /* Ensures it doesn't shrink */
     min-width: 100%; /* Prevents it from being too small */
@@ -216,6 +222,7 @@ td {
     font-size: 50px;
 }
 .quantity {
+    margin: 5px;
     background-color: var(--color-background-soft);
     border: none;
     color: var(--color-text);

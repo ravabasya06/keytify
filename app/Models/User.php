@@ -31,6 +31,11 @@ class User extends Authenticatable
         return $this->hasMany(Review::class, 'review_id', 'review_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'id', 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
