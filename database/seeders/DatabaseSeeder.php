@@ -17,9 +17,30 @@ class DatabaseSeeder extends Seeder
         if(!User::where('name', 'admin')->exists()){
             User::factory()->create([
                 'name' => 'admin',
-                'email' => 'admin@ecommerce.mail',
+                'email' => 'admin@keytify.com',
                 'isAdmin' => 1,
                 'password' => 'admin'
+            ]);
+
+            User::factory()->create([
+                'name' => 'Glarses',
+                'email' => 'glarses@gmail.com',
+                'isAdmin' => 0,
+                'password' => 'glarses'
+            ]);
+
+            User::factory()->create([
+                'name' => 'Squashy',
+                'email' => 'squashy@gmail.com',
+                'isAdmin' => 0,
+                'password' => 'squashy'
+            ]);
+
+            User::factory()->create([
+                'name' => 'Hipyo',
+                'email' => 'hipyo@gmail.com',
+                'isAdmin' => 0,
+                'password' => 'hipyo'
             ]);
         }
 

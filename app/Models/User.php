@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
+use App\Models\Review;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,11 @@ class User extends Authenticatable
         'isAdmin',
         'password',
     ];
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'review_id', 'review_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
