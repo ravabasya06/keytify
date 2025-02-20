@@ -108,6 +108,7 @@ const save = () => {
                             class="filter-select"
                             id="brand"
                         >
+                            <option value="">None</option>
                             <option
                                 v-for="brand in props.brands"
                                 :value="brand.brand_id"

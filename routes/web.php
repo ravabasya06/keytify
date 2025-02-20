@@ -28,15 +28,17 @@ Route::inertia('/about', 'About')->name('about');
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     // Product List
-    Route::get('/product-list', [ProductListController::class, 'index'])->name('search.product');
-    Route::get('/product-list/{slug}', [ProductListController::class, 'filter'])->name('product.filter');
+    Route::get('/product-list', [ProductListController::class, 'index'])->name('productlist.search');
+    Route::get('/product-list/{slug}', [ProductListController::class, 'filter'])->name('productlist.filter');
+    Route::post('/product-list', [ProductListController::class, 'store'])->name('productlist.store');
+    Route::put('/product-list/update/{id}', [ProductListController::class, 'update'])->name('productlist.update');
+    Route::delete('/product-list/destroy/{id}', [ProductListController::class, 'destroy'])->name('productlist.destroy');
     // Brand List
     Route::get('/brand-list', [BrandListController::class, 'index'])->name('brandlist.search');
     Route::get('/brand-list/{slug}', [BrandListController::class, 'filter'])->name('brandlist.filter');
     Route::post('/brand-list', [BrandListController::class, 'store'])->name('brandlist.store');
     Route::put('/brand-list/update/{id}', [BrandListController::class, 'update'])->name('brandlist.update');
     Route::delete('/brand-list/destroy/{id}', [BrandListController::class, 'destroy'])->name('brandlist.destroy');
-
     // Category List
     Route::get('/category-list', [CategoryListController::class, 'index'])->name('categorylist.search');
     Route::get('/category-list/{slug}', [CategoryListController::class, 'filter'])->name('categorylist.filter');

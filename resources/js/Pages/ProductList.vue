@@ -18,7 +18,7 @@ const search = () => {
     });
 
     if (query.value) {
-        form.get(route("search.product"));
+        form.get(route("productlist.search"));
     } else {
         router.visit("/product-list");
     }
@@ -91,6 +91,12 @@ const handleSave = (formData) => {
         router.post(route("productlist.store"), formData, {
             onSuccess: () => closeModal(),
         });
+    }
+};
+
+const handleDelete = (id) => {
+    if (confirm("Are you sure you want to delete this item?")) {
+        router.delete(route("productlist.destroy", id));
     }
 };
 
@@ -234,7 +240,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                                 >
                                     Edit
                                 </button>
-                                <button class="delete-btn">Delete</button>
+                                <button
+                                    @click="handleDelete(item.item_id)"
+                                    class="delete-btn"
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     </tbody>
