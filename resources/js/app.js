@@ -26,6 +26,7 @@ import {
     faSort,
     faTag,
     faInfoCircle,
+    faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -46,6 +47,7 @@ library.add(
     faSort,
     faTag,
     faInfoCircle,
+    faCircleXmark,
 );
 
 createInertiaApp({

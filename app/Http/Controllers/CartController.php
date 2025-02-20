@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -21,25 +20,28 @@ class CartController extends Controller
             ->orWhere('session_id', $session_id)
             ->select(['cart_id', 'item_id', 'quantity'])
             ->get();
-        // dd($cart_items);
+        $total_price = $cart_items->sum(function ($cart) {
+            return $cart->item->price * $cart->quantity;
+        });
+
         return Inertia::render('Cart', [
-            'cart_items' => $cart_items
+            'cart_items' => $cart_items,
+            'total_price' => $total_price
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id) // Add $id here
     {
         $validated = $request->validate([
-            'item_id' => 'required|integer',
             'quantity' => 'required|integer|min:1'
         ]);
-
+    
         $session_id = Session::getId();
         $user_id = Auth::id();
-
+    
         // Check if the item is already in the cart
-        $cart = Cart::where(function ($query) use ($user_id, $session_id, $validated) {
-            $query->where('item_id', $validated['item_id'])
+        $cart = Cart::where(function ($query) use ($user_id, $session_id, $id) {
+            $query->where('item_id', $id)
                 ->where(function ($query) use ($user_id, $session_id) {
                     if ($user_id) {
                         $query->where('user_id', $user_id);
@@ -48,20 +50,20 @@ class CartController extends Controller
                     }
                 });
         })->first();
-
+    
         if ($cart) {
             $cart->update(['quantity' => $cart->quantity + $validated['quantity']]);
         } else {
             Cart::create([
                 'user_id' => $user_id,
                 'session_id' => $user_id ? null : $session_id,
-                'item_id' => $validated['item_id'],
+                'item_id' => $id, // Use $id instead of validated['item_id']
                 'quantity' => $validated['quantity']
             ]);
         }
-
+    
         return Redirect::back()->with('message', 'An item successfully added to cart!');
-    }
+    }    
 
     public function update(Request $request, Cart $cart)
     {
@@ -72,8 +74,9 @@ class CartController extends Controller
         return Redirect::back()->with('message', 'An item successfully updated!');
     }
 
-    public function destroy(Cart $cart)
+    public function destroy($id)
     {
+        $cart = Cart::findOrFail($id);
         $cart->delete();
 
         return Redirect::back()->with('message', 'An item successfully deleted from cart');

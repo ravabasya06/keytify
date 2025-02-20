@@ -1,8 +1,13 @@
 <script setup>
+import { router } from "@inertiajs/vue3";
 import Layout from "../Components/Layout.vue";
 import ItemOverview from "../Components/ItemOverview.vue";
 
 defineProps(["item", "related_items"]);
+
+const addToCart = (id) => {
+    router.post(route("cart.store", id), { quantity: 1 });
+};
 
 const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
@@ -65,7 +70,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     <p class="item-short-desc">{{ item.short_desc }}</p>
                 </div>
                 <div class="details-bottom-container">
-                    <button class="add-to-cart">ADD TO CART</button>
+                    <button
+                        @click="addToCart(item.item_id)"
+                        class="add-to-cart"
+                    >
+                        ADD TO CART
+                    </button>
                 </div>
             </div>
         </div>
@@ -176,6 +186,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 .add-to-cart {
     font-size: 15px;
     background-color: var(--color-logo);
+    border: none;
     color: var(--color-background);
     border-radius: 5px;
     padding: 10px;
