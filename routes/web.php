@@ -15,7 +15,7 @@ use App\Http\Controllers\BrandListController;
 use App\Http\Controllers\CategoryListController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\ReviewListController;
-
+use App\Http\Controllers\CartController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/item/{slug}', [ItemController::class, 'index']);
@@ -23,6 +23,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('search');
 Route::get('/shop/{slug}', [ShopController::class, 'filter'])->name('filter');
 Route::get('/brand/{slug}', [BrandController::class, 'index']);
 Route::get('/cart', [CartController::class, 'index']);
+Route::post('/item/add/{id}', [CartController::class, 'store'])->name('cart.store');
 Route::inertia('/about', 'About')->name('about');
 
 Route::middleware(['auth', 'admin'])->group(function () {
