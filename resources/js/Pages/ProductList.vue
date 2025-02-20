@@ -2,7 +2,8 @@
 import { ref, watch, computed } from "vue";
 import { useForm, router } from "@inertiajs/vue3";
 import AdminLayout from "../Components/AdminLayout.vue";
-const props = defineProps(["items", "categories", "slug"]);
+import ProductListModal from "../Components/ProductListModal.vue";
+const props = defineProps(["items", "categories", "slug", "brands"]);
 
 const query = ref("");
 const category = ref("");
@@ -63,6 +64,36 @@ const sortedItems = computed(() => {
     });
 });
 
+const isModalOpen = ref(false);
+const selectedItem = ref(null);
+
+const openModal = (item = null) => {
+    selectedItem.value = item;
+    isModalOpen.value = true;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+};
+
+const handleSave = (formData) => {
+    if (selectedItem.value) {
+        // Edit existing category
+        router.put(
+            route("productlist.update", selectedItem.value.item_id),
+            formData,
+            {
+                onSuccess: () => closeModal(),
+            },
+        );
+    } else {
+        // Add new category
+        router.post(route("productlist.store"), formData, {
+            onSuccess: () => closeModal(),
+        });
+    }
+};
+
 const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
@@ -105,7 +136,11 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                             {{ category.name }}
                         </option>
                     </select>
-                    <button class="page-btn" style="width: 40px; height: 40px">
+                    <button
+                        @click="openModal()"
+                        class="page-btn"
+                        style="width: 40px; height: 40px"
+                    >
                         <font-awesome-icon icon="fa-solid fa-plus" />
                     </button>
                 </div>
@@ -193,7 +228,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                             <td class="ellipsis">{{ item.image_url }}</td>
                             <td>{{ item.status ? "Yes" : "No" }}</td>
                             <td>
-                                <button class="edit-btn">Edit</button>
+                                <button
+                                    @click="openModal(item)"
+                                    class="edit-btn"
+                                >
+                                    Edit
+                                </button>
                                 <button class="delete-btn">Delete</button>
                             </td>
                         </tr>
@@ -218,6 +258,14 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
             >
         </div>
     </AdminLayout>
+    <ProductListModal
+        :isOpen="isModalOpen"
+        :item="selectedItem"
+        :brands="props.brands"
+        :categories="props.categories"
+        @close="closeModal"
+        @save="handleSave"
+    />
 </template>
 
 <style scoped>

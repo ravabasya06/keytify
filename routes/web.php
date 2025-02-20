@@ -27,18 +27,21 @@ Route::inertia('/about', 'About')->name('about');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    // Product List
     Route::get('/product-list', [ProductListController::class, 'index'])->name('search.product');
     Route::get('/product-list/{slug}', [ProductListController::class, 'filter'])->name('product.filter');
+    // Brand List
     Route::get('/brand-list', [BrandListController::class, 'index'])->name('brandlist.search');
     Route::get('/brand-list/{slug}', [BrandListController::class, 'filter'])->name('brandlist.filter');
+    // Category List
     Route::get('/category-list', [CategoryListController::class, 'index'])->name('categorylist.search');
     Route::get('/category-list/{slug}', [CategoryListController::class, 'filter'])->name('categorylist.filter');
+    // User List
     Route::get('/user-list', [UserListController::class, 'index'])->name('userlist.search');
     Route::get('/user-list/{slug}', [UserListController::class, 'filter'])->name('userlist.filter');
+    // Review List
     Route::get('/review-list', [ReviewListController::class, 'index'])->name('reviewlist.search');
     Route::get('/review-list/{slug}', [ReviewListController::class, 'filter'])->name('reviewlist.filter');
-
-
 });
 
 Route::middleware(['auth'])->group(function () {

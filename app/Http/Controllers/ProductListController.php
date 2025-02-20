@@ -14,6 +14,7 @@ class ProductListController extends Controller
     public function index(Request $request){ 
         $query = $request->input('search_query');
 
+        $brands = Brand::get();
         $categories = Category::leftJoin('items', 'items.category_id', '=', 'categories.category_id')
         ->select('categories.category_id', 'categories.name', 'categories.slug', DB::raw('COUNT(items.item_id) as count'))
         ->groupBy('categories.category_id', 'categories.name', 'categories.slug')
@@ -35,11 +36,14 @@ class ProductListController extends Controller
 
         return Inertia::render('ProductList', [
             'items' => $items,
-            'categories' => $categories
+            'categories' => $categories,
+            'brands' => $brands
         ]);
     }
 
     public function filter($slug){
+        $brands = Brand::get();
+
         $categories = Category::leftJoin('items', 'items.category_id', '=', 'categories.category_id')
         ->select('categories.category_id', 'categories.name', 'categories.slug', DB::raw('COUNT(items.item_id) as count'))
         ->groupBy('categories.category_id', 'categories.name', 'categories.slug')
@@ -60,7 +64,8 @@ class ProductListController extends Controller
         return Inertia::render('ProductList', [
             'items' => $items,
             'categories' => $categories,
-            'slug' => $slug
+            'slug' => $slug,
+            'brands' => $brands
         ]);
     }
 
