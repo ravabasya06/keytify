@@ -1,8 +1,13 @@
 <script setup>
+import { router } from "@inertiajs/vue3";
 defineProps(["title", "item"]);
 
 const noImage =
     "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+
+const addToCart = (id) => {
+    router.post(route("cart.store", id), { quantity: 1 });
+};
 
 const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
@@ -24,12 +29,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
             </div>
             <div class="overview-add-item">
                 <p class="price">{{ `Rp${formatPrice(item.price)}` }}</p>
-                <Link href="">
+                <button @click="addToCart(item.item_id)" class="cart-button">
                     <font-awesome-icon
                         class="overview-icon"
                         icon="fa-solid fa-cart-plus"
                     />
-                </Link>
+                </button>
             </div>
         </div>
     </div>
@@ -55,6 +60,10 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
     flex-direction: column;
     max-width: 275px;
     border-radius: 5px;
+}
+.cart-button {
+    background-color: var(--color-background);
+    border: none;
 }
 .item:hover {
     color: var(--color-logo);

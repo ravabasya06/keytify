@@ -27,10 +27,10 @@ class ShopController extends Controller
             ->orWhere('items.desc', 'LIKE', "%{$query}%")
             ->orWhere('brands.name', 'LIKE', "%{$query}%")
             ->orWhere('categories.name', 'LIKE', "%{$query}%")
-            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url');
+            ->select('items.item_id', 'items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url');
         }
         else {
-            $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url');
+            $results = Item::select('item_id', 'name', 'slug', 'price', 'short_desc', 'image_url');
         }
         
         $items = $results->paginate(12)->withQueryString()->onEachSide(1);
@@ -52,16 +52,16 @@ class ShopController extends Controller
 
         if($slug == "featured"){
             $results = Item::where('featured', true)
-            ->select('name', 'slug', 'price', 'short_desc', 'image_url');
+            ->select('item_id', 'name', 'slug', 'price', 'short_desc', 'image_url');
         }
         else if($slug == "price-ascending"){
             $category_title = "Price Ascending";
-            $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')
+            $results = Item::select('item_id', 'name', 'slug', 'price', 'short_desc', 'image_url')
             ->orderBy('price');
         }
         else if($slug == "price-descending"){
             $category_title = "Price Descending";
-            $results = Item::select('name', 'slug', 'price', 'short_desc', 'image_url')
+            $results = Item::select('item_id', 'name', 'slug', 'price', 'short_desc', 'image_url')
             ->orderByDesc('price');
         }
         else {
@@ -77,7 +77,7 @@ class ShopController extends Controller
             ->leftJoin('brands', 'items.brand_id', '=', 'brands.brand_id')
             ->where('brands.slug', $slug)
             ->orWhere('categories.slug', $slug)
-            ->select('items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url');
+            ->select('items.item_id', 'items.name', 'items.slug', 'items.price', 'items.short_desc', 'items.image_url');
         }
 
         $items = $results->paginate(12)->withQueryString()->onEachSide(1);
