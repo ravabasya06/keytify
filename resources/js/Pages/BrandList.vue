@@ -94,6 +94,12 @@ const handleSave = (formData) => {
     }
 };
 
+const handleDelete = (id) => {
+    if (confirm("Are you sure you want to delete this brand?")) {
+        router.delete(route("brandlist.destroy", id));
+    }
+};
+
 const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
@@ -186,7 +192,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                                 >
                                     Edit
                                 </button>
-                                <button class="delete-btn">Delete</button>
+                                <button
+                                    @click="handleDelete(brand.brand_id)"
+                                    class="delete-btn"
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     </tbody>

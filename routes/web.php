@@ -33,9 +33,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Brand List
     Route::get('/brand-list', [BrandListController::class, 'index'])->name('brandlist.search');
     Route::get('/brand-list/{slug}', [BrandListController::class, 'filter'])->name('brandlist.filter');
+    Route::post('/brand-list', [BrandListController::class, 'store'])->name('brandlist.store');
+    Route::put('/brand-list/update/{id}', [BrandListController::class, 'update'])->name('brandlist.update');
+    Route::delete('/brand-list/destroy/{id}', [BrandListController::class, 'destroy'])->name('brandlist.destroy');
+
     // Category List
     Route::get('/category-list', [CategoryListController::class, 'index'])->name('categorylist.search');
     Route::get('/category-list/{slug}', [CategoryListController::class, 'filter'])->name('categorylist.filter');
+    Route::post('/category-list', [CategoryListController::class, 'store'])->name('categorylist.store');
+    Route::put('/category-list/update/{id}', [CategoryListController::class, 'update'])->name('categorylist.update');
+    Route::delete('/category-list/destroy/{id}', [CategoryListController::class, 'destroy'])->name('categorylist.destroy');
     // User List
     Route::get('/user-list', [UserListController::class, 'index'])->name('userlist.search');
     Route::get('/user-list/{slug}', [UserListController::class, 'filter'])->name('userlist.filter');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Models\Brand;
 
@@ -43,5 +44,39 @@ class BrandListController extends Controller
             'slug' => $slug
         ]);
     }
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'slug' => 'required|string|max:255|unique:categories,slug',
+            'desc' => 'nullable|string',
+            'image_url' => 'nullable|string',
+        ]);
 
+        Brand::create($validatedData);
+
+        return Redirect::route('brandlist.search')->with('message', 'New brand has been successfully added');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $brand = Brand::findOrFail($id);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|unique:brands|string|max:255',
+            'desc' => 'nullable|string',
+            'image_url' => 'nullable',
+        ]);
+        $brand->update($validatedData);
+
+        return Redirect::route('brandlist.search')->with('message', 'A brand has been successfully updated');
+    }
+
+    public function destroy($id)
+    {
+        $brand = Brand::findOrFail($id);
+        $brand->delete();
+
+        return Redirect::route('brandlist.search')->with('message', 'A brand has been successfully deleted');
+    }
 }

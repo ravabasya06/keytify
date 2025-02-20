@@ -80,7 +80,7 @@ const handleSave = (formData) => {
     if (selectedCategory.value) {
         // Edit existing category
         router.put(
-            route("categorylist.update", selectedCategory.value.id),
+            route("categorylist.update", selectedCategory.value.category_id),
             formData,
             {
                 onSuccess: () => closeModal(),
@@ -91,6 +91,12 @@ const handleSave = (formData) => {
         router.post(route("categorylist.store"), formData, {
             onSuccess: () => closeModal(),
         });
+    }
+};
+
+const handleDelete = (id) => {
+    if (confirm("Are you sure you want to delete this category?")) {
+        router.delete(route("categorylist.destroy", id));
     }
 };
 
@@ -186,7 +192,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                                 >
                                     Edit
                                 </button>
-                                <button class="delete-btn">Delete</button>
+                                <button
+                                    @click="handleDelete(category.category_id)"
+                                    class="delete-btn"
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     </tbody>
