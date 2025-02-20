@@ -51,6 +51,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Review List
     Route::get('/review-list', [ReviewListController::class, 'index'])->name('reviewlist.search');
     Route::get('/review-list/{slug}', [ReviewListController::class, 'filter'])->name('reviewlist.filter');
+    Route::post('/review-list', [ReviewListController::class, 'store'])->name('reviewlist.store');
+    Route::put('/review-list/update/{id}', [ReviewListController::class, 'update'])->name('reviewlist.update');
+    Route::delete('/review-list/destroy/{id}', [ReviewListController::class, 'destroy'])->name('reviewlist.destroy');
+
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Models\Review;
 
@@ -42,6 +43,41 @@ class ReviewListController extends Controller
             'reviews' => $reviews,
             'slug' => $slug
         ]);
+    }
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'desc' => 'nullable|string',
+            'image_url' => 'nullable|string',
+            'rating' => 'nullable|integer',
+        ]);
+
+        Review::create($validatedData);
+
+        return Redirect::route('reviewlist.search')->with('message', 'New review has been successfully added');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $review = Review::findOrFail($id);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'desc' => 'nullable|string',
+            'image_url' => 'nullable|string',
+            'rating' => 'nullable|integer',
+        ]);
+        $review->update($validatedData);
+
+        return Redirect::route('reviewlist.search')->with('message', 'A review has been successfully updated');
+    }
+
+    public function destroy($id)
+    {
+        $review = Review::findOrFail($id);
+        $review->delete();
+
+        return Redirect::route('reviewlist.search')->with('message', 'A review has been successfully deleted');
     }
 
 }

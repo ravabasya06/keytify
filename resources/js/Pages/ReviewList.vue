@@ -2,6 +2,7 @@
 import { ref, watch, computed } from "vue";
 import { useForm, router } from "@inertiajs/vue3";
 import AdminLayout from "../Components/AdminLayout.vue";
+import ReviewListModal from "../Components/ReviewListModal.vue";
 const props = defineProps(["reviews", "slug"]);
 
 const query = ref("");
@@ -63,6 +64,42 @@ const sortedReviews = computed(() => {
     });
 });
 
+const isModalOpen = ref(false);
+const selectedReview = ref(null);
+
+const openModal = (review = null) => {
+    selectedReview.value = review;
+    isModalOpen.value = true;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+};
+
+const handleSave = (formData) => {
+    if (selectedReview.value) {
+        // Edit existing category
+        router.put(
+            route("reviewlist.update", selectedReview.value.review_id),
+            formData,
+            {
+                onSuccess: () => closeModal(),
+            },
+        );
+    } else {
+        // Add new category
+        router.post(route("reviewlist.store"), formData, {
+            onSuccess: () => closeModal(),
+        });
+    }
+};
+
+const handleDelete = (id) => {
+    if (confirm("Are you sure you want to delete this review?")) {
+        router.delete(route("reviewlist.destroy", id));
+    }
+};
+
 const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
@@ -99,7 +136,11 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                             Alphabet: Descending
                         </option>
                     </select>
-                    <button class="page-btn" style="width: 40px; height: 40px">
+                    <button
+                        @click="openModal()"
+                        class="page-btn"
+                        style="width: 40px; height: 40px"
+                    >
                         <font-awesome-icon icon="fa-solid fa-plus" />
                     </button>
                 </div>
@@ -143,8 +184,18 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                             <td class="ellipsis">{{ review.image_url }}</td>
                             <td>{{ review.rating }}</td>
                             <td>
-                                <button class="edit-btn">Edit</button>
-                                <button class="delete-btn">Delete</button>
+                                <button
+                                    @click="openModal(review)"
+                                    class="edit-btn"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    @click="handleDelete(review.review_id)"
+                                    class="delete-btn"
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -168,6 +219,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
             >
         </div>
     </AdminLayout>
+    <ReviewListModal
+        :isOpen="isModalOpen"
+        :review="selectedReview"
+        @close="closeModal"
+        @save="handleSave"
+    />
 </template>
 
 <style scoped>
