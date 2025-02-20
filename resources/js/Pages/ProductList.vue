@@ -100,7 +100,8 @@ const handleDelete = (id) => {
     }
 };
 
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
+const formatPrice = (price) =>
+    "Rp" + new Intl.NumberFormat("id-ID").format(price) + ",00";
 </script>
 
 <template>
@@ -223,7 +224,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                             <td>{{ item.brand && item.brand.name }}</td>
                             <td>{{ item.type }}</td>
                             <td>{{ item.stock }}</td>
-                            <td>{{ `Rp${formatPrice(item.price)}` }}</td>
+                            <td>{{ formatPrice(item.price) }}</td>
                             <td>{{ item.featured ? "Yes" : "No" }}</td>
                             <td class="ellipsis">
                                 {{ item.short_desc }}

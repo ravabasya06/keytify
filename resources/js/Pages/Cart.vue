@@ -4,13 +4,22 @@ import { router } from "@inertiajs/vue3";
 import Layout from "../Components/Layout.vue";
 defineProps(["cart_items", "total_price"]);
 
+const updateQuantity = (cart, newQuantity) => {
+    if (newQuantity < 1) return;
+    if (newQuantity > 999) return;
+    router.put(route("cart.update", cart.cart_id), {
+        quantity: newQuantity,
+    });
+};
+
 const handleDelete = (id) => {
     if (confirm("Are you sure you want to delete this item?")) {
         router.delete(route("cart.destroy", id));
     }
 };
 
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
+const formatPrice = (price) =>
+    "Rp" + new Intl.NumberFormat("id-ID").format(price) + ",00";
 </script>
 <template>
     <Layout title="Cart">
@@ -54,10 +63,40 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                                     >{{ cart.item.name }}</Link
                                 >
                             </td>
-                            <td>Rp{{ formatPrice(cart.item.price) }}</td>
-                            <td>{{ cart.quantity }}</td>
+                            <td>{{ formatPrice(cart.item.price) }}</td>
+                            <td class="quantity-column">
+                                <button
+                                    @click="
+                                        updateQuantity(cart, cart.quantity - 1)
+                                    "
+                                    class="quantity-btn"
+                                >
+                                    −
+                                </button>
+                                <input
+                                    v-model="cart.quantity"
+                                    type="number"
+                                    name="quantity"
+                                    id="quantity"
+                                    style="margin-left: 25px; margin-right: 0px"
+                                    class="quantity"
+                                    min="1"
+                                    max="999"
+                                    @keyup.enter="
+                                        updateQuantity(cart, cart.quantity)
+                                    "
+                                />
+                                <button
+                                    @click="
+                                        updateQuantity(cart, cart.quantity + 1)
+                                    "
+                                    class="quantity-btn"
+                                >
+                                    +
+                                </button>
+                            </td>
                             <td>
-                                Rp{{
+                                {{
                                     formatPrice(cart.item.price * cart.quantity)
                                 }}
                             </td>
@@ -68,7 +107,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
             <div class="checkout-container">
                 <div class="total-container">
                     <h1>Total</h1>
-                    <h1>Rp{{ formatPrice(total_price) }}</h1>
+                    <h1>{{ formatPrice(total_price) }}</h1>
                 </div>
                 <button class="checkout-button">Proceed to Checkout</button>
             </div>
@@ -120,7 +159,7 @@ td {
     background-color: var(--color-logo);
     color: var(--color-background);
     border: none;
-    transition: transform 0.2s;
+    transition: 0.2s;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -175,5 +214,26 @@ td {
     margin-top: 30px;
     margin-left: 50px;
     font-size: 50px;
+}
+.quantity {
+    background-color: var(--color-background-soft);
+    border: none;
+    color: var(--color-text);
+    width: 50px;
+    font-size: 15px;
+}
+.quantity-btn {
+    background-color: var(--color-logo);
+    color: var(--color-background);
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: 0.2s;
+}
+
+.quantity-btn:hover {
+    background-color: var(--color-text-2);
 }
 </style>

@@ -3,8 +3,6 @@ import Layout from "../Components/Layout.vue";
 import ItemOverview from "../Components/ItemOverview.vue";
 
 defineProps(["brand", "items", "recommended_items"]);
-
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 <template>
     <Layout title="Brand">

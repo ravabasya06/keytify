@@ -62,8 +62,6 @@ const sortedUsers = computed(() => {
         return 0;
     });
 });
-
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
 <template>

@@ -9,7 +9,8 @@ const addToCart = (id) => {
     router.post(route("cart.store", id), { quantity: 1 });
 };
 
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
+const formatPrice = (price) =>
+    "Rp" + new Intl.NumberFormat("id-ID").format(price) + ",00";
 </script>
 <template>
     <div class="item">
@@ -28,7 +29,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                 <p class="desc">{{ item.short_desc }}</p>
             </div>
             <div class="overview-add-item">
-                <p class="price">{{ `Rp${formatPrice(item.price)}` }}</p>
+                <p class="price">{{ formatPrice(item.price) }}</p>
                 <button @click="addToCart(item.item_id)" class="cart-button">
                     <font-awesome-icon
                         class="overview-icon"

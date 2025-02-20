@@ -65,13 +65,16 @@ class CartController extends Controller
         return Redirect::back()->with('message', 'An item successfully added to cart!');
     }    
 
-    public function update(Request $request, Cart $cart)
+    public function update(Request $request, $id)
     {
-        $request->validate(['quantity' => 'required|integer|min:1']);
+        $cart = Cart::findOrFail($id);
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1'
+        ]);
 
-        $cart->update(['quantity' => $request->quantity]);
-
-        return Redirect::back()->with('message', 'An item successfully updated!');
+        $cart->update($validated);
+    
+        return Redirect::back()->with('message', 'Cart updated successfully');
     }
 
     public function destroy($id)

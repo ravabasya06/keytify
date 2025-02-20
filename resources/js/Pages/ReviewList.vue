@@ -99,8 +99,6 @@ const handleDelete = (id) => {
         router.delete(route("reviewlist.destroy", id));
     }
 };
-
-const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
 <template>

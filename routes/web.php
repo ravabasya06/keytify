@@ -24,6 +24,7 @@ Route::get('/shop/{slug}', [ShopController::class, 'filter'])->name('filter');
 Route::get('/brand/{slug}', [BrandController::class, 'index']);
 Route::get('/cart', [CartController::class, 'index']);
 Route::post('/item/add/{id}', [CartController::class, 'store'])->name('cart.store');
+Route::put('/item/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/item/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::inertia('/about', 'About')->name('about');
 
