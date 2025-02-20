@@ -2,7 +2,7 @@
 import { ref, watch, computed } from "vue";
 import { useForm, router } from "@inertiajs/vue3";
 import AdminLayout from "../Components/AdminLayout.vue";
-const props = defineProps(["items", "categories", "slug"]);
+const props = defineProps(["reviews", "slug"]);
 
 const query = ref("");
 const category = ref("");
@@ -17,17 +17,17 @@ const search = () => {
     });
 
     if (query.value) {
-        form.get(route("search.product"));
+        form.get(route("reviewlist.search"));
     } else {
-        router.visit("/product-list");
+        router.visit("/review-list");
     }
 };
 
 watch(category, (newCategory) => {
     if (newCategory) {
-        router.visit(`/product-list/${newCategory}`);
+        router.visit(`/review-list/${newCategory}`);
     } else {
-        router.visit("/product-list");
+        router.visit("/review-list");
     }
 });
 
@@ -40,12 +40,12 @@ const sortBy = (column) => {
     }
 };
 
-const sortedItems = computed(() => {
+const sortedReviews = computed(() => {
     if (!sortColumn.value) {
-        return props.items.data; // Return original if no sorting is selected
+        return props.reviews.data; // Return original if no sorting is selected
     }
 
-    return [...props.items.data].sort((a, b) => {
+    return [...props.reviews.data].sort((a, b) => {
         let valueA = a[sortColumn.value];
         let valueB = b[sortColumn.value];
 
@@ -67,7 +67,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
 </script>
 
 <template>
-    <AdminLayout title="Products">
+    <AdminLayout title="Reviews">
         <div class="table-container">
             <div class="table-controls">
                 <form class="search-container" @submit.prevent="search">
@@ -76,7 +76,7 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                         class="search-input"
                         type="text"
                         name="search_query"
-                        placeholder="Search items.."
+                        placeholder="Search reviews.."
                         autocomplete="off"
                     />
                     <button
@@ -91,18 +91,12 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                 </form>
                 <div class="filter-add-container">
                     <select v-model="category" class="filter-select">
-                        <option value="">All Categories</option>
-                        <option value="price-ascending">
-                            Price: Low to High
+                        <option value="">Default</option>
+                        <option value="alphabet-ascending">
+                            Alphabet: Ascending
                         </option>
-                        <option value="price-descending">
-                            Price: High to Low
-                        </option>
-                        <option
-                            v-for="category in props.categories"
-                            :value="category.slug"
-                        >
-                            {{ category.name }}
+                        <option value="alphabet-descending">
+                            Alphabet: Descending
                         </option>
                     </select>
                     <button class="page-btn" style="width: 40px; height: 40px">
@@ -116,55 +110,23 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                 <table>
                     <thead>
                         <tr class="table-head-container">
-                            <th @click="sortBy('item_id')">
+                            <th @click="sortBy('review_id')">
                                 ID <font-awesome-icon icon="fa-solid fa-sort" />
                             </th>
                             <th @click="sortBy('name')">
                                 Name
                                 <font-awesome-icon icon="fa-solid fa-sort" />
                             </th>
-                            <th @click="sortBy('slug')">
-                                Slug
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('category.name')">
-                                Category
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('brand.name')">
-                                Brand
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('type')">
-                                Type
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('stock')">
-                                Stock
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('price')">
-                                Price
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('featured')">
-                                Featured
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
-                            <th @click="sortBy('short_desc')">
-                                Short Desc
-                                <font-awesome-icon icon="fa-solid fa-sort" />
-                            </th>
                             <th @click="sortBy('desc')">
-                                Desc
+                                Description
                                 <font-awesome-icon icon="fa-solid fa-sort" />
                             </th>
                             <th @click="sortBy('image_url')">
                                 Image URL
                                 <font-awesome-icon icon="fa-solid fa-sort" />
                             </th>
-                            <th @click="sortBy('status')">
-                                Active
+                            <th @click="sortBy('rating')">
+                                Rating
                                 <font-awesome-icon icon="fa-solid fa-sort" />
                             </th>
                             <th>Actions</th>
@@ -173,25 +135,13 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                     <tbody>
                         <tr
                             class="table-body-container"
-                            v-for="item in sortedItems"
+                            v-for="review in sortedReviews"
                         >
-                            <td>{{ item.item_id }}</td>
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.slug }}</td>
-                            <td>{{ item.category.name }}</td>
-                            <td>{{ item.brand && item.brand.name }}</td>
-                            <td>{{ item.type }}</td>
-                            <td>{{ item.stock }}</td>
-                            <td>{{ `Rp${formatPrice(item.price)}` }}</td>
-                            <td>{{ item.featured ? "Yes" : "No" }}</td>
-                            <td class="ellipsis">
-                                {{ item.short_desc }}
-                            </td>
-                            <td class="ellipsis">
-                                {{ item.desc }}
-                            </td>
-                            <td class="ellipsis">{{ item.image_url }}</td>
-                            <td>{{ item.status ? "Yes" : "No" }}</td>
+                            <td>{{ review.review_id }}</td>
+                            <td>{{ review.name }}</td>
+                            <td class="ellipsis">{{ review.desc }}</td>
+                            <td class="ellipsis">{{ review.image_url }}</td>
+                            <td>{{ review.rating }}</td>
                             <td>
                                 <button class="edit-btn">Edit</button>
                                 <button class="delete-btn">Delete</button>
@@ -204,8 +154,8 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
         <div class="pagination">
             <div class="pagination-button">
                 <Link
-                    v-if="props.items.links"
-                    v-for="link in props.items.links"
+                    v-if="props.reviews.links"
+                    v-for="link in props.reviews.links"
                     :href="link.url ? link.url : ''"
                     class="page-btn"
                 >
@@ -213,8 +163,8 @@ const formatPrice = (price) => new Intl.NumberFormat("id-ID").format(price);
                 </Link>
             </div>
             <span class="page-info"
-                >Page {{ props.items.current_page }} of
-                {{ props.items.last_page }}</span
+                >Page {{ props.reviews.current_page }} of
+                {{ props.reviews.last_page }}</span
             >
         </div>
     </AdminLayout>

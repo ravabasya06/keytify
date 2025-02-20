@@ -24,12 +24,12 @@ class ProductListController extends Controller
             $items = $all_items->where('name', 'LIKE', "%{$query}%")
             ->orWhere('type', 'LIKE', "%{$query}%")
             ->orWhere('name', 'LIKE', "%{$query}%")
-            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'short_desc', 'desc', 'image_url', 'status'])
+            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'featured', 'short_desc', 'desc', 'image_url', 'status'])
             ->paginate(10)->withQueryString()->onEachSide(1);
         }
         else {
             $items = Item::with(['category:category_id,name', 'brand:brand_id,name'])
-            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'short_desc', 'desc', 'image_url', 'status'])
+            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'featured', 'short_desc', 'desc', 'image_url', 'status'])
             ->paginate(10)->withQueryString()->onEachSide(1);
         }
 
@@ -46,7 +46,7 @@ class ProductListController extends Controller
         ->get();
 
         $query = Item::with(['category:category_id,name', 'brand:brand_id,name'])
-            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'short_desc', 'desc', 'image_url', 'status']);
+            ->select(['item_id', 'name', 'slug', 'category_id', 'brand_id', 'type', 'stock', 'price', 'featured', 'short_desc', 'desc', 'image_url', 'status']);
 
         if ($slug === 'price-ascending') {
             $query->orderBy('price');
