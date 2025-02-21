@@ -15,11 +15,13 @@ class CartController extends Controller
     {
         $session_id = Session::getId();
         $user_id = Auth::id();
-        $cart_items = Cart::with(['item:item_id,name,slug,slug,stock,price,image_url'])
-            ->where('user_id', $user_id)
+
+        $cart_items = Cart::with(['item:item_id,name,slug,stock,price,image_url'])
+            ->whereIn('user_id', [$user_id, null])
             ->orWhere('session_id', $session_id)
             ->select(['cart_id', 'item_id', 'quantity'])
             ->get();
+
         $total_price = $cart_items->sum(function ($cart) {
             return $cart->item->price * $cart->quantity;
         });

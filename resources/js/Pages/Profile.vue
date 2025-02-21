@@ -1,46 +1,10 @@
 <script setup>
-import { useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import Layout from "../Components/Layout.vue";
 defineProps(["user"]);
 
-// const props = defineProps({
-//     spbu: {
-//         type: Object,
-//         default: null,
-//     },
-//     islands: {
-//         type: Object,
-//     },
-//     provinces: {
-//         type: Object,
-//     },
-// });
-
-// const form = useForm({
-//     name: props.spbu?.name ?? "",
-//     road: props.spbu?.road ?? "",
-//     city: props.spbu?.city ?? "",
-//     province_id: props.spbu?.province_id ?? "",
-//     island_id: props.spbu?.island_id ?? "",
-//     latitude: props.spbu?.latitude ?? "",
-//     longitude: props.spbu?.longitude ?? "",
-// });
-
-// const handleSubmit = () => {
-//     if (isEditMode.value) {
-//         form.put(`/spbu/${form.spbu_id}`);
-//     } else {
-//         form.post(route("spbu.store"), {
-//             preserveScroll: true,
-//             onSuccess: () => form.reset(),
-//         });
-//     }
-// };
-
-const logoutForm = useForm({});
 const logout = () => {
-    console.log("Logging out");
-    logoutForm.post(route("logout"));
+    router.post(route("logout"));
 };
 </script>
 <template>
@@ -54,9 +18,7 @@ const logout = () => {
                 </p>
                 <p v-if="user.isAdmin">You're an Admin!</p>
 
-                <form @submit.prevent="logout">
-                    <button type="submit">Logout</button>
-                </form>
+                <button @click="logout()" type="submit">Logout</button>
             </div>
         </div>
     </Layout>

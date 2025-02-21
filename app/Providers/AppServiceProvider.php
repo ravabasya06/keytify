@@ -35,8 +35,8 @@ class AppServiceProvider extends ServiceProvider
 
                 $user_id = Auth::id();
                 $session_id = Session::getId();
-                
-                return Cart::where(function ($query) use ($user_id, $session_id) {
+
+                $cart_items = Cart::where(function ($query) use ($user_id, $session_id) {
                     if ($user_id) {
                         $query->where('user_id', $user_id);
                     } else {
@@ -44,6 +44,8 @@ class AppServiceProvider extends ServiceProvider
                     }
                 })
                 ->sum('quantity');
+                
+                return $cart_items;
             },
         ]);
     }
