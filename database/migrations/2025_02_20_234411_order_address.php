@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->string('city');
             $table->string('province');
             $table->string('island');
-            $table->integer('postal_code');
-            $table->integer('phone_number');
+            $table->string('postal_code');
+            $table->string('phone_number');
             $table->timestamps();
 
             $table->foreign('order_id')->references('order_id')->on('orders')->onDelete('cascade');
