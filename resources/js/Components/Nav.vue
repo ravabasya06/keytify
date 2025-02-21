@@ -1,8 +1,8 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-defineProps(["user"]);
 
-const { user } = usePage().props;
+defineProps(["user", "cart_count"]);
+const { user, cart_count } = usePage().props;
 </script>
 
 <template>
@@ -31,6 +31,21 @@ const { user } = usePage().props;
             <Link href="/cart">
                 <div class="user-icon">
                     <font-awesome-icon icon="fa-solid fa-cart-shopping" />
+                    <span
+                        style="
+                            position: absolute;
+                            font-size: 14px;
+                            margin-left: 3px;
+                            color: var(--color-text);
+                        "
+                        >{{
+                            cart_count < 1
+                                ? ""
+                                : cart_count && cart_count > 99
+                                ? "99+"
+                                : cart_count
+                        }}
+                    </span>
                 </div>
             </Link>
             <Link href="/profile">

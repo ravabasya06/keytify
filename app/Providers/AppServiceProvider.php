@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use App\Models\Cart;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,24 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share([
             'user' => function () {
                 return Auth::user();
+            },
+
+            'cart_count' => function () {
+                if (app()->runningInConsole()) {
+                    return 0;
+                }
+
+                $user_id = Auth::id();
+                $session_id = Session::getId();
+                
+                return Cart::where(function ($query) use ($user_id, $session_id) {
+                    if ($user_id) {
+                        $query->where('user_id', $user_id);
+                    } else {
+                        $query->where('session_id', $session_id);
+                    }
+                })
+                ->sum('quantity');
             },
         ]);
     }

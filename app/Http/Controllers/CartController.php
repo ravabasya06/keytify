@@ -84,4 +84,15 @@ class CartController extends Controller
 
         return Redirect::back()->with('message', 'An item successfully deleted from cart');
     }
+
+    public function purge()
+    {
+        $session_id = Session::getId();
+        $user_id = Auth::id();
+
+        $cart = Cart::where('user_id', $user_id)->orWhere('session_id', $session_id);
+        $cart->delete();
+
+        return Redirect::back()->with('message', 'Your cart has been successfully cleared');
+    }
 }

@@ -13,8 +13,12 @@ const updateQuantity = (cart, newQuantity) => {
 };
 
 const handleDelete = (id) => {
-    if (confirm("Are you sure you want to delete this item?")) {
-        router.delete(route("cart.destroy", id));
+    router.delete(route("cart.destroy", id));
+};
+
+const deleteAll = () => {
+    if (confirm("Are you sure you want to delete all items?")) {
+        router.delete(route("cart.purge"));
     }
 };
 
@@ -23,7 +27,16 @@ const formatPrice = (price) =>
 </script>
 <template>
     <Layout title="Cart">
-        <h1 class="cart-title">Cart</h1>
+        <div class="title-container">
+            <h1 class="cart-title">Cart</h1>
+            <p
+                v-if="cart_items.length > 0"
+                @click="deleteAll()"
+                class="delete-all-button"
+            >
+                Delete All
+            </p>
+        </div>
         <div v-if="cart_items.length > 0" class="cart-container">
             <div class="products-container">
                 <table>
@@ -151,6 +164,19 @@ td {
     padding: 10px;
     border-bottom: 1px solid var(--color-text-2);
 }
+.title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.delete-all-button {
+    font-size: 18px;
+    cursor: pointer;
+}
 .shopnow-button {
     padding: 10px;
     background-color: var(--color-logo);
@@ -217,8 +243,6 @@ td {
     color: var(--color-text-2);
 }
 .cart-title {
-    margin-top: 30px;
-    margin-left: 50px;
     font-size: 50px;
 }
 .quantity {
