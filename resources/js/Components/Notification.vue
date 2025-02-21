@@ -19,5 +19,6 @@
     border-radius: 10px;
     color: var(--color-text);
     background-color: var(--color-background-mute);
+    box-shadow: 2px 2px 10px black;
 }
 </style>

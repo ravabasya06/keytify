@@ -49,6 +49,10 @@ const formatPrice = (price) =>
 .overview-icon {
     color: var(--color-logo);
     font-size: 20px;
+    transition: 0.2s;
+}
+.overview-icon:hover {
+    transform: scale(1.5);
 }
 .overview-add-item {
     display: flex;
