@@ -31,6 +31,6 @@ class Order extends Model
 
     public function order_address()
     {
-        return $this->hasMany(OrderAddress::class, 'order_id', 'order_id');
+        return $this->hasOne(OrderAddress::class, 'order_id', 'order_id');
     }
 }
