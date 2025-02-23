@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use App\Models\UserAddress;
 use App\Models\Cart;
-use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderAddress;
@@ -18,51 +17,48 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        $session_id = Session::getId();
-        $user_id = Auth::id();
+        $sessionId = Session::getId();
+        $userId = Auth::id();
 
-        $user_address = UserAddress::where('user_id', $user_id)->first();
-        $cart_items = Cart::with(['item:item_id,name,slug,stock,price,image_url'])
-            ->whereIn('user_id', [$user_id, null])
-            ->orWhere('session_id', $session_id)
-            ->select(['cart_id', 'item_id', 'quantity'])
+        $userAddress = UserAddress::where('user_id', $userId)->first();
+
+        $cartItems = Cart::with('item:item_id,name,slug,stock,price,image_url')
+            ->where('session_id', $sessionId)
+            ->orWhere('user_id', $userId)
             ->get();
 
         return Inertia::render('Checkout', [
-            'user_address' => $user_address,
-            'cart_items' => $cart_items,
+            'user_address' => $userAddress,
+            'cart_items' => $cartItems,
         ]);
     }
 
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $userId = Auth::id();
+        $sessionId = Session::getId();
 
-        // Fetch cart items
         $cartItems = Cart::with('item')
-            ->where(function ($query) use ($user) {
-                if ($user) {
-                    $query->where('user_id', $user->id);
-                } else {
-                    $query->where('session_id', session()->getId());
-                }
-            })->get();
+            ->where('session_id', $sessionId)
+            ->orWhere('user_id', $userId)
+            ->get();
 
         if ($cartItems->isEmpty()) {
             return Redirect::back()->with('message', 'Your cart is empty.');
         }
 
-        // Calculate total price
-        $totalPrice = $cartItems->sum(fn($cart) => $cart->item->price * $cart->quantity);
-        // Create order
+        $totalPrice = 0;
+        foreach ($cartItems as $cart) {
+            $totalPrice += $cart->item->price * $cart->quantity;
+        }
+
         $order = Order::create([
-            'user_id' => $user ? $user->id : null,
-            'session_id' => $user ? null : Session::getId(),
+            'user_id' => $userId,
+            'session_id' => $userId ? null : $sessionId,
             'total_price' => $totalPrice,
             'status' => 'pending',
         ]);
 
-        // Insert shipping address
         OrderAddress::create([
             'order_id' => $order->order_id,
             'first_name' => $request->first_name,
@@ -75,18 +71,16 @@ class CheckoutController extends Controller
             'phone_number' => $request->phone_number,
         ]);
 
-        // Insert order items
         foreach ($cartItems as $cart) {
             OrderItem::create([
                 'order_id' => $order->order_id,
                 'item_id' => $cart->item_id,
                 'quantity' => $cart->quantity,
-                'price' => $cart->item->price ?? 0,
+                'price' => $cart->item->price,
             ]);
         }
 
-        // Clear cart
-        Cart::where('user_id', $user->id)->orWhere('session_id', Session::getId())->delete();
+        Cart::where('user_id', $userId)->orWhere('session_id', $sessionId)->delete();
 
         return Redirect::route('home')->with('message', 'Order placed successfully!');
     }

@@ -45,14 +45,16 @@ const formatPrice = (price) =>
 <template>
     <Layout title="Checkout">
         <div class="checkout-container">
-            <h2 v-if="!isSummary">Shipping Details</h2>
-            <h2 v-else>Order Summary</h2>
+            <div>
+                <h1 v-if="!isSummary">Shipping Details</h1>
+                <h1 v-else>Order Summary</h1>
 
-            <p style="color: var(--color-text-2)">
-                Please
-                {{ props.user_address ? "review" : "add" }} your shipping
-                information before proceeding.
-            </p>
+                <p style="color: var(--color-text-2)">
+                    Please
+                    {{ props.user_address ? "review" : "add" }} your shipping
+                    information before proceeding.
+                </p>
+            </div>
 
             <!-- SHIPPING DETAILS FORM -->
             <form v-if="!isSummary" @submit.prevent="isSummary = true">
@@ -64,6 +66,7 @@ const formatPrice = (price) =>
                                 type="text"
                                 v-model="form.first_name"
                                 :disabled="!!props.user_address"
+                                required
                             />
                         </div>
                         <div class="child-name-container">
@@ -72,6 +75,7 @@ const formatPrice = (price) =>
                                 type="text"
                                 v-model="form.last_name"
                                 :disabled="!!props.user_address"
+                                required
                             />
                         </div>
                     </div>
@@ -81,6 +85,7 @@ const formatPrice = (price) =>
                         type="text"
                         v-model="form.phone_number"
                         :disabled="!!props.user_address"
+                        required
                     />
 
                     <label>Address</label>
@@ -88,6 +93,7 @@ const formatPrice = (price) =>
                         type="text"
                         v-model="form.address"
                         :disabled="!!props.user_address"
+                        required
                     />
 
                     <div class="name-container">
@@ -97,6 +103,7 @@ const formatPrice = (price) =>
                                 type="text"
                                 v-model="form.city"
                                 :disabled="!!props.user_address"
+                                required
                             />
                         </div>
                         <div class="child-name-container">
@@ -105,6 +112,7 @@ const formatPrice = (price) =>
                                 type="text"
                                 v-model="form.province"
                                 :disabled="!!props.user_address"
+                                required
                             />
                         </div>
                         <div class="child-name-container">
@@ -113,6 +121,7 @@ const formatPrice = (price) =>
                                 type="text"
                                 v-model="form.island"
                                 :disabled="!!props.user_address"
+                                required
                             />
                         </div>
                         <div class="child-name-container">
@@ -121,6 +130,7 @@ const formatPrice = (price) =>
                                 type="text"
                                 v-model="form.postal_code"
                                 :disabled="!!props.user_address"
+                                required
                             />
                         </div>
                     </div>
@@ -131,31 +141,46 @@ const formatPrice = (price) =>
                 </div>
             </form>
 
-            <!-- ORDER SUMMARY -->
-            <div v-else>
-                <h3>Shipping Address</h3>
-                <p>
-                    {{ form.first_name }} {{ form.last_name }}<br />
-                    {{ form.address }}, {{ form.city }}, {{ form.province
-                    }}<br />
-                    {{ form.island }}, {{ form.postal_code }}<br />
-                    Phone: {{ form.phone_number }}
-                </p>
-
-                <h3>Order Items</h3>
-                <div class="order-items">
-                    <div
-                        class="order-item"
-                        v-for="cart in props.cart_items"
-                        :key="cart.cart_id"
-                    >
-                        <span
-                            >{{ cart.item.name }} x{{ cart.quantity }}
-                            {{
-                                formatPrice(cart.item.price * cart.quantity)
-                            }}</span
-                        >
+            <div class="next-container" v-else>
+                <div>
+                    <h2>Shipping Address</h2>
+                    <div>
+                        <p>Name : {{ form.first_name }} {{ form.last_name }}</p>
+                        <p>Phone : {{ form.phone_number }}</p>
+                        <p>
+                            Address : {{ form.address }}, {{ form.city }},
+                            {{ form.province }}, {{ form.island }},
+                            {{ form.postal_code }}
+                        </p>
                     </div>
+                </div>
+                <div>
+                    <h2>Order Items</h2>
+                    <table class="order-items">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="cart in props.cart_items"
+                                :key="cart.cart_id"
+                            >
+                                <td>{{ cart.item.name }}</td>
+                                <td>{{ cart.quantity }}</td>
+                                <td>
+                                    {{
+                                        formatPrice(
+                                            cart.item.price * cart.quantity,
+                                        )
+                                    }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <h3>
@@ -186,11 +211,30 @@ const formatPrice = (price) =>
 
 <style scoped>
 .checkout-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
     margin: 30px;
     background: var(--color-background-mute);
     padding: 20px;
     border-radius: 10px;
     color: var(--color-text);
+}
+.order-items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-items th,
+.order-items td {
+    border: 1px solid var(--color-text-2);
+    padding: 8px;
+    text-align: left;
+}
+
+.order-items th {
+    background-color: var(--color-background-soft);
 }
 
 .address-details-container {
@@ -205,6 +249,11 @@ const formatPrice = (price) =>
     gap: 20px;
 }
 
+.next-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
 .child-name-container {
     display: flex;
     flex-direction: column;
