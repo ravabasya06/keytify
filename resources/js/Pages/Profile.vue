@@ -237,7 +237,7 @@ textarea {
     border-radius: 5px;
     cursor: pointer;
     background-color: red;
-    color: var(--color-text);
+    color: var(--color-background-mute);
 }
 .logout-btn:hover {
     background-color: darkred;
