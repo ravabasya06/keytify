@@ -61,6 +61,11 @@ class CheckoutController extends Controller
 
         $invoiceId = "{$randomPrefix}{$year}{$month}{$day}{$randomMiddle}{$userOrSession}";
 
+        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
         $order = Order::create([
             'invoice_id' => $invoiceId,
             'user_id' => $userId,
@@ -69,7 +74,19 @@ class CheckoutController extends Controller
             'status' => 'pending',
         ]);
 
-        OrderAddress::create([
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $order->invoice_id,
+                'gross_amount' => $totalPrice,
+            ),
+            'customer_details' => array(
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => Auth::user()->email ?? "guest@gmail.com"
+            )
+        );
+        
+        $order_address = OrderAddress::create([
             'order_id' => $order->order_id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -89,6 +106,11 @@ class CheckoutController extends Controller
                 'price' => $cart->item->price,
             ]);
         }
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        $order->snap_token = $snapToken;
+        $order->save();
 
         Cart::where('user_id', $userId)->orWhere('session_id', $sessionId)->delete();
 

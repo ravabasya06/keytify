@@ -35,6 +35,8 @@ Route::get('/checkout', [CheckoutController::class, 'index']);
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/order', [OrderDetailsController::class, 'index'])->name('orderdetails');
 Route::get('/order/{id}', [OrderDetailsController::class, 'details'])->name('orderdetails.details');
+Route::post('/payment/success', [OrderDetailsController::class, 'success'])->name('order.success');
+Route::get('/payment/failed', [OrderDetailsController::class, 'failed'])->name('order.failed');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);

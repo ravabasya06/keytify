@@ -17,6 +17,7 @@ class Order extends Model
         'user_id',
         'session_id',
         'total_price',
+        'snap_token',
         'status',
     ];
 

@@ -1,9 +1,34 @@
 <script setup>
+import { onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
 import Layout from "../Components/Layout.vue";
-defineProps(["order", "items", "address"]);
+const props = defineProps(["order", "items", "address"]);
 
 const formatPrice = (price) =>
     "Rp" + new Intl.NumberFormat("id-ID").format(price) + ",00";
+
+onMounted(() => {
+    let script = document.createElement("script");
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.setAttribute("data-client-key", import.meta.env.MIDTRANS_CLIENT_KEY);
+    document.body.appendChild(script);
+
+    document.getElementById("pay-button").onclick = function () {
+        snap.pay(`${props.order.snap_token}`, {
+            onSuccess: function () {
+                router.post(route("order.success"), {
+                    id: props.order.invoice_id,
+                });
+            },
+            onPending: function () {
+                return;
+            },
+            onError: function () {
+                router.visit("order.failed");
+            },
+        });
+    };
+});
 </script>
 
 <template>
@@ -70,7 +95,16 @@ const formatPrice = (price) =>
             </h3>
 
             <div class="button-group">
-                <Link href="/order" class="back-btn">Back</Link>
+                <Link href="#" onclick="history.go(-1)" class="back-btn"
+                    >Back</Link
+                >
+                <button
+                    v-if="order.status != 'processed'"
+                    id="pay-button"
+                    class="back-btn"
+                >
+                    Pay Now
+                </button>
             </div>
         </div>
     </Layout>
@@ -117,7 +151,7 @@ const formatPrice = (price) =>
 
 .button-group {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin-top: 15px;
 }
 

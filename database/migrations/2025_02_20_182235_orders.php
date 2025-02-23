@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('session_id')->nullable();
             $table->integer('total_price');
+            $table->string('snap_token')->nullable();
             $table->string('status')->default('pending'); // pending -> processed -> delivered -> done / cancelled
             $table->timestamps();
 

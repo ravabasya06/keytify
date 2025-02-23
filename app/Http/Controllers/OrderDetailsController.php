@@ -30,4 +30,17 @@ class OrderDetailsController extends Controller
             'address' => $order_address,
         ]);
     }
+
+    public function success(Request $request){
+        $order = Order::where('invoice_id', $request->id)->first();
+
+        $order->status = 'processed';
+        $order->save();
+
+        return Redirect::back()->with('message', 'Payment success! Processing your package now!');
+    }
+
+    public function failed(){
+        return Redirect::back()->with('message', 'Payment failed, please try again later.');
+    }
 }
