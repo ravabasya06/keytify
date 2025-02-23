@@ -6,8 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Carbon\Carbon;
 use App\Models\Review;
 
 class User extends Authenticatable
@@ -36,6 +34,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'id', 'user_id');
     }
 
+    public function user_address()
+    {
+        return $this->hasMany(UserAddress::class, 'id', 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -45,20 +48,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    protected function createdAt(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => Carbon::parse($value)->format('d-m-Y h:m:s'),
-        );
-    }
-
-    protected function updatedAt(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => Carbon::parse($value)->format('d-m-Y h:m:s'),
-        );
-    }
 
     /**
      * Get the attributes that should be cast.

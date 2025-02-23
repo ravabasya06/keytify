@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Order;
 
-class OrderAddress extends Model
+class UserAddress extends Model
 {
     use HasFactory;
-    protected $table = 'order_address';
-    protected $primaryKey = 'order_address_id';
+    protected $table = 'user_address';
+    protected $primaryKey = 'user_address_id';
     protected $fillable = [
-        'order_id',
+        'user_id',
         'first_name',
         'last_name',
         'address',
@@ -23,8 +22,11 @@ class OrderAddress extends Model
         'phone_number',
     ];
 
-    public function order()
+    /**
+     * Get the user that owns the address.
+     */
+    public function user()
     {
-        return $this->belongsTo(Order::class, 'order_id', 'order_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
