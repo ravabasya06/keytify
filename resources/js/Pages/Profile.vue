@@ -12,6 +12,7 @@ const profileForm = ref({
 });
 
 const addressForm = ref({
+    user_id: user.id,
     first_name: user_address?.first_name || "",
     last_name: user_address?.last_name || "",
     address: user_address?.address || "",
@@ -27,7 +28,14 @@ const updateProfile = () => {
 };
 
 const updateAddress = () => {
-    router.put(route("user_address.update"), addressForm.value);
+    if (!user_address || !user_address.user_address_id) {
+        router.post(route("address.store"), addressForm.value);
+    } else {
+        router.put(
+            route("address.update", { id: user_address.user_address_id }),
+            addressForm.value,
+        );
+    }
 };
 
 const logout = () => {
@@ -80,52 +88,78 @@ const memberSince = (userDate) => {
                     you'll ever experience!
                 </p>
                 <form @submit.prevent="updateAddress()">
-                    <label>First Name</label>
-                    <input
-                        v-model="addressForm.first_name"
-                        type="text"
-                        required
-                    />
-
-                    <label>Last Name</label>
-                    <input
-                        v-model="addressForm.last_name"
-                        type="text"
-                        required
-                    />
-
+                    <div class="name-container">
+                        <div class="child-name-container">
+                            <label>First Name</label>
+                            <input
+                                v-model="addressForm.first_name"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div class="child-name-container">
+                            <label>Last Name</label>
+                            <input
+                                v-model="addressForm.last_name"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div class="child-name-container">
+                            <label>Phone Number</label>
+                            <input
+                                v-model="addressForm.phone_number"
+                                type="text"
+                                required
+                            />
+                        </div>
+                    </div>
                     <label>Address</label>
-                    <input v-model="addressForm.address" type="text" required />
-
-                    <label>City</label>
-                    <input v-model="addressForm.city" type="text" required />
-
-                    <label>Province</label>
-                    <input
-                        v-model="addressForm.province"
+                    <textarea
+                        v-model="addressForm.address"
                         type="text"
                         required
-                    />
-
-                    <label>Island</label>
-                    <input v-model="addressForm.island" type="text" required />
-
-                    <label>Postal Code</label>
-                    <input
-                        v-model="addressForm.postal_code"
-                        type="text"
-                        required
-                    />
-
-                    <label>Phone Number</label>
-                    <input
-                        v-model="addressForm.phone_number"
-                        type="text"
-                        required
-                    />
-
-                    <button class="submit-btn" type="submit">
-                        Update Address
+                    ></textarea>
+                    <div class="name-container">
+                        <div class="child-name-container">
+                            <label>City</label>
+                            <input
+                                v-model="addressForm.city"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div class="child-name-container">
+                            <label>Province</label>
+                            <input
+                                v-model="addressForm.province"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div class="child-name-container">
+                            <label>Island</label>
+                            <input
+                                v-model="addressForm.island"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div class="child-name-container">
+                            <label>Postal Code</label>
+                            <input
+                                v-model="addressForm.postal_code"
+                                type="number"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <button
+                        style="margin-top: 20px"
+                        class="submit-btn"
+                        type="submit"
+                    >
+                        Save
                     </button>
                 </form>
             </div>
@@ -144,19 +178,31 @@ const memberSince = (userDate) => {
 form {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    /* width: 50%; */
 }
 label {
     display: block;
     margin: 10px 0 5px;
 }
-input {
+input,
+textarea {
     padding: 10px;
     border: 1px solid var(--color-text-2);
     color: var(--color-text);
     background-color: var(--color-background-soft);
     border-radius: 3px;
     font-size: 16px;
+}
+.name-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+.child-name-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 .password-save-container {
     display: flex;

@@ -16,6 +16,7 @@ use App\Http\Controllers\CategoryListController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\ReviewListController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserAddressController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/item/{slug}', [ItemController::class, 'index']);
@@ -65,6 +66,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
+    Route::post('/profile/address', [UserAddressController::class, 'store'])->name('address.store');
+    Route::put('/profile/address/{id}', [UserAddressController::class, 'update'])->name('address.update');
+    Route::delete('/profile/address', [UserAddressController::class, 'destroy'])->name('address.destroy');
 });
 
 Route::middleware('guest')->group(function () {

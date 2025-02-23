@@ -13,8 +13,8 @@ class ProfileController extends Controller
 {
     public function index(){
         $id = Auth::id();
-        $user_address = UserAddress::where('user_id', $id)->get();
-
+        $user_address = UserAddress::where('user_id', $id)->first();
+        
         return Inertia::render('Profile', [
             'user_address' => $user_address,
         ]);
