@@ -44,7 +44,7 @@ const formatPrice = (price) =>
 
 <template>
     <Layout title="Checkout">
-        <div class="checkout-container">
+        <div v-if="cart_items.length > 0" class="checkout-container">
             <div>
                 <h1 v-if="!isSummary">Shipping Details</h1>
                 <h1 v-else>Order Summary</h1>
@@ -206,6 +206,12 @@ const formatPrice = (price) =>
                 </div>
             </div>
         </div>
+        <div style="height: 30vw" v-else>
+            <p style="margin: 30px">
+                No item is in your cart.
+                <Link href="/shop" class="shopnow-button">Shop Now!</Link>
+            </p>
+        </div>
     </Layout>
 </template>
 
@@ -254,6 +260,15 @@ const formatPrice = (price) =>
     flex-direction: column;
     gap: 30px;
 }
+.shopnow-button {
+    padding: 10px;
+    background-color: var(--color-logo);
+    color: var(--color-background);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
 .child-name-container {
     display: flex;
     flex-direction: column;

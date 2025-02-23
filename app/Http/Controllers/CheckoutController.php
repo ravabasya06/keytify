@@ -52,7 +52,17 @@ class CheckoutController extends Controller
             $totalPrice += $cart->item->price * $cart->quantity;
         }
 
+        $randomPrefix = rand(10, 99); // Random 2-digit number
+        $year = date('Y'); // Current year
+        $month = date('m'); // Current month
+        $day = date('d'); // Current day
+        $randomMiddle = rand(1000, 9999); // Random 4-digit number
+        $userOrSession = $userId ? $userId : rand(100, 999); // User ID or random 3-digit number for guests
+
+        $invoiceId = "{$randomPrefix}{$year}{$month}{$day}{$randomMiddle}{$userOrSession}";
+
         $order = Order::create([
+            'invoice_id' => $invoiceId,
             'user_id' => $userId,
             'session_id' => $userId ? null : $sessionId,
             'total_price' => $totalPrice,
@@ -82,6 +92,6 @@ class CheckoutController extends Controller
 
         Cart::where('user_id', $userId)->orWhere('session_id', $sessionId)->delete();
 
-        return Redirect::route('home')->with('message', 'Order placed successfully!');
+        return Redirect::route('orderdetails.details', ['id' => $order->invoice_id])->with('message', 'Order placed successfully!');
     }
 }

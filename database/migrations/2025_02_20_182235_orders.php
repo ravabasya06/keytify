@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id('order_id'); // tambahin alamat
+            $table->id('order_id');
+            $table->string('invoice_id');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('session_id')->nullable(); // For guests
+            $table->string('session_id')->nullable();
             $table->integer('total_price');
             $table->string('status')->default('pending'); // pending -> processed -> delivered -> done / cancelled
             $table->timestamps();

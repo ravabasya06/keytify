@@ -18,6 +18,7 @@ use App\Http\Controllers\ReviewListController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderDetailsController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::inertia('/about', 'About')->name('about');
@@ -32,6 +33,8 @@ Route::delete('/cart/destroy/{id}', [CartController::class, 'destroy'])->name('c
 Route::delete('/cart/purge', [CartController::class, 'purge'])->name('cart.purge');
 Route::get('/checkout', [CheckoutController::class, 'index']);
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/order', [OrderDetailsController::class, 'index'])->name('orderdetails');
+Route::get('/order/{id}', [OrderDetailsController::class, 'details'])->name('orderdetails.details');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);

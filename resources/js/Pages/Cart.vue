@@ -27,8 +27,11 @@ const formatPrice = (price) =>
 </script>
 <template>
     <Layout title="Cart">
+        <div style="display: flex">
+            <Link class="order-checker" href="/order">Order Checker</Link>
+        </div>
         <div class="title-container">
-            <h1 class="cart-title">Cart</h1>
+            <p class="cart-title">Cart</p>
             <p
                 v-if="cart_items.length > 0"
                 @click="deleteAll()"
@@ -271,5 +274,12 @@ td {
 
 .quantity-btn:hover {
     background-color: var(--color-text-2);
+}
+.order-checker {
+    display: flex;
+    padding: 10px;
+    background-color: var(--color-background-mute);
+    color: var(--color-text);
+    border-bottom-right-radius: 10px;
 }
 </style>
