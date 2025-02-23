@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import Layout from "../Components/Layout.vue";
 
-defineProps(["user", "user_address"]);
+defineProps(["user", "user_address", "orders"]);
 
 const { user, user_address } = usePage().props;
 const profileForm = ref({
@@ -53,6 +53,13 @@ const memberSince = (userDate) => {
 
     return `You've been our customer for ${differenceInDays} days!`;
 };
+
+const viewOrder = (id) => {
+    router.visit(`/order/${id}`);
+};
+
+const formatPrice = (price) =>
+    "Rp" + new Intl.NumberFormat("id-ID").format(price) + ",00";
 </script>
 
 <template>
@@ -163,6 +170,37 @@ const memberSince = (userDate) => {
                     </button>
                 </form>
             </div>
+            <div class="profile-container">
+                <h2>Order History</h2>
+                <p class="subtitle">
+                    History of items you've bought from Keytify!
+                </p>
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice ID</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="order in orders" :key="order.invoice_id">
+                            <td>{{ order.invoice_id }}</td>
+                            <td>{{ formatPrice(order.total_price) }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                <button
+                                    class="submit-btn"
+                                    @click="viewOrder(order.invoice_id)"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </Layout>
 </template>
@@ -237,9 +275,30 @@ textarea {
     border-radius: 5px;
     cursor: pointer;
     background-color: red;
-    color: var(--color-background-mute);
+    color: white;
 }
 .logout-btn:hover {
     background-color: darkred;
+}
+.subtitle {
+    color: var(--color-text-2);
+    margin-bottom: 15px;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-table th,
+.order-table td {
+    border: 1px solid var(--color-text-2);
+    padding: 8px;
+    text-align: left;
+}
+
+.order-table th {
+    background-color: var(--color-background-soft);
 }
 </style>

@@ -8,15 +8,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
 use App\Models\UserAddress;
+use App\Models\Order;
 
 class ProfileController extends Controller
 {
     public function index(){
         $id = Auth::id();
         $user_address = UserAddress::where('user_id', $id)->first();
+        $orders = Order::where('user_id', $id)->get();
         
         return Inertia::render('Profile', [
             'user_address' => $user_address,
+            'orders' => $orders
         ]);
     }
 
