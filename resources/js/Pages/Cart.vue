@@ -122,7 +122,12 @@ const formatPrice = (price) =>
                     <h1>Total</h1>
                     <h1>{{ formatPrice(total_price) }}</h1>
                 </div>
-                <button class="checkout-button">Proceed to Checkout</button>
+                <Link
+                    style="text-align: center"
+                    href="/checkout"
+                    class="checkout-button"
+                    >Proceed to Checkout</Link
+                >
             </div>
         </div>
         <div style="margin-left: 50px; height: 20vw" v-else>

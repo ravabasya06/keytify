@@ -17,8 +17,10 @@ use App\Http\Controllers\UserListController;
 use App\Http\Controllers\ReviewListController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\CheckoutController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::inertia('/about', 'About')->name('about');
 Route::get('/item/{slug}', [ItemController::class, 'index']);
 Route::get('/shop', [ShopController::class, 'index'])->name('search');
 Route::get('/shop/{slug}', [ShopController::class, 'filter'])->name('filter');
@@ -28,7 +30,8 @@ Route::post('/cart/add/{id}', [CartController::class, 'store'])->name('cart.stor
 Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::delete('/cart/purge', [CartController::class, 'purge'])->name('cart.purge');
-Route::inertia('/about', 'About')->name('about');
+Route::get('/checkout', [CheckoutController::class, 'index']);
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
