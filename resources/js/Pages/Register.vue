@@ -29,7 +29,7 @@ const submit = () => {
     <Layout title="Register">
         <div class="auth">
             <div class="auth-container">
-                <h2>Daftarkan Akun</h2>
+                <h2>Register an Account</h2>
                 <form class="form-container" @submit.prevent="submit">
                     <div>
                         <label for="name">Name</label>
@@ -81,7 +81,7 @@ const submit = () => {
                     </div>
                     <div>
                         <label for="password_confirmation"
-                            >Konfirmasi Password</label
+                            >Password Confirmation</label
                         >
                         <input
                             id="password_confirmation"
@@ -97,9 +97,9 @@ const submit = () => {
                             >{{ form.errors.password_confirmation }}</span
                         >
                     </div>
-                    <button type="submit">Daftar</button>
+                    <button type="submit">Register</button>
                 </form>
-                <Link href="/login">Sudah punya akun?</Link>
+                <Link href="/login">Already have an account?</Link>
             </div>
         </div>
     </Layout>

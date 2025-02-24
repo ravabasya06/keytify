@@ -50,9 +50,9 @@ const submit = () => {
                             >{{ form.errors.password }}</span
                         >
                     </div>
-                    <button type="submit">Masuk</button>
+                    <button type="submit">Login</button>
                 </form>
-                <Link href="/register">Belum punya akun?</Link>
+                <Link href="/register">Don't have an account?</Link>
             </div>
         </div>
     </Layout>
