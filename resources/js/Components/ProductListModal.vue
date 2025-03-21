@@ -218,6 +218,13 @@ const save = () => {
     </Teleport>
 </template>
 <style scoped>
+select {
+    padding: 5px;
+    border: 1px solid var(--color-text-2);
+    color: var(--color-text);
+    background-color: var(--color-background-mute);
+    border-radius: 3px;
+}
 /* Modal Overlay */
 .modal-overlay {
     position: fixed;

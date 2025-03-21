@@ -2,6 +2,7 @@
 import { ref, watch, computed } from "vue";
 import { useForm, router } from "@inertiajs/vue3";
 import AdminLayout from "../Components/AdminLayout.vue";
+import formatDate from "../utils/formatDate.js";
 const props = defineProps(["users", "slug"]);
 
 const query = ref("");
@@ -149,8 +150,8 @@ const sortedUsers = computed(() => {
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.isAdmin ? "Yes" : "No" }}</td>
-                            <td>{{ user.created_at }}</td>
-                            <td>{{ user.updated_at }}</td>
+                            <td>{{ formatDate(user.created_at) }}</td>
+                            <td>{{ formatDate(user.updated_at) }}</td>
                             <td>
                                 <button class="delete-btn">Delete</button>
                             </td>
